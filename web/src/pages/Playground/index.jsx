@@ -459,16 +459,16 @@ const Playground = () => {
 
   return (
     <PlaygroundProvider value={playgroundContextValue}>
-      <div className='h-full'>
-        <Layout className='h-full bg-transparent flex flex-col md:flex-row'>
+      <div className='mt-[72px] flex min-h-[calc(100vh-72px)] flex-col px-3 py-4 md:px-6 md:py-6'>
+        <Layout className='flex min-h-0 flex-1 overflow-hidden rounded-[32px] border border-[var(--opencub-border-light)] bg-[var(--opencub-light-surface)] shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[var(--opencub-dark-surface)] md:flex-row'>
           {(showSettings || !isMobile) && (
             <Layout.Sider
               className={`
-              bg-transparent border-r-0 flex-shrink-0 overflow-auto mt-[60px]
+              bg-transparent border-r-0 flex-shrink-0 overflow-auto
               ${
                 isMobile
-                  ? 'fixed top-0 left-0 right-0 bottom-0 z-[1000] w-full h-auto bg-white shadow-lg'
-                  : 'relative z-[1] w-80 h-[calc(100vh-66px)]'
+                  ? 'fixed top-0 left-0 right-0 bottom-0 z-[1000] w-full h-auto bg-[rgba(243,238,231,0.98)] shadow-lg dark:bg-zinc-950'
+                  : 'relative z-[1] w-80 h-full border-r border-[var(--opencub-border-light)] dark:border-white/10'
               }
             `}
               width={isMobile ? '100%' : 320}
@@ -496,8 +496,8 @@ const Playground = () => {
             </Layout.Sider>
           )}
 
-          <Layout.Content className='relative flex-1 overflow-hidden'>
-            <div className='overflow-hidden flex flex-col lg:flex-row h-[calc(100vh-66px)] mt-[60px]'>
+          <Layout.Content className='relative flex min-h-0 flex-1 overflow-hidden'>
+            <div className='flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row'>
               <div className='flex-1 flex flex-col'>
                 <ChatArea
                   chatRef={chatRef}
@@ -534,7 +534,7 @@ const Playground = () => {
 
             {/* 调试面板 - 移动端覆盖层 */}
             {showDebugPanel && isMobile && (
-              <div className='fixed top-0 left-0 right-0 bottom-0 z-[1000] bg-white overflow-auto shadow-lg'>
+              <div className='fixed top-0 left-0 right-0 bottom-0 z-[1000] overflow-auto bg-[rgba(243,238,231,0.98)] shadow-lg dark:bg-zinc-950'>
                 <OptimizedDebugPanel
                   debugData={debugData}
                   activeDebugTab={activeDebugTab}

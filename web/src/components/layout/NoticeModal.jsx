@@ -29,12 +29,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import { API, showError, getRelativeTime } from '../../helpers';
 import { marked } from 'marked';
-import {
-  IllustrationNoContent,
-  IllustrationNoContentDark,
-} from '@douyinfe/semi-illustrations';
 import { StatusContext } from '../../context/Status';
-import { Bell, Megaphone } from 'lucide-react';
+import { Bell, Megaphone, Inbox } from 'lucide-react';
+import EmptyStateIcon from '../common/EmptyStateIcon';
 
 const NoticeModal = ({
   visible,
@@ -129,12 +126,7 @@ const NoticeModal = ({
       return (
         <div className='py-12'>
           <Empty
-            image={
-              <IllustrationNoContent style={{ width: 150, height: 150 }} />
-            }
-            darkModeImage={
-              <IllustrationNoContentDark style={{ width: 150, height: 150 }} />
-            }
+            image={<EmptyStateIcon icon={Inbox} accent='slate' />}
             description={t('暂无公告')}
           />
         </div>
@@ -154,12 +146,7 @@ const NoticeModal = ({
       return (
         <div className='py-12'>
           <Empty
-            image={
-              <IllustrationNoContent style={{ width: 150, height: 150 }} />
-            }
-            darkModeImage={
-              <IllustrationNoContentDark style={{ width: 150, height: 150 }} />
-            }
+            image={<EmptyStateIcon icon={Megaphone} accent='amber' />}
             description={t('暂无系统公告')}
           />
         </div>

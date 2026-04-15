@@ -19,12 +19,17 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import TokensTable from '../../components/table/tokens';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const Token = () => {
   return (
-    <div className='mt-[60px] px-2'>
+    <ConsolePageShell
+      eyebrow='tokens'
+      title='令牌管理'
+      description='集中管理访问令牌、额度和调用入口，保持发放与回收流程更清晰可控。'
+    >
       <TokensTable />
-    </div>
+    </ConsolePageShell>
   );
 };
 

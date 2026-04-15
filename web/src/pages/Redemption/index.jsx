@@ -19,12 +19,17 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import RedemptionsTable from '../../components/table/redemptions';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const Redemption = () => {
   return (
-    <div className='mt-[60px] px-2'>
+    <ConsolePageShell
+      eyebrow='redemptions'
+      title='兑换管理'
+      description='统一维护兑换码与发放记录，减少信息层级和查找成本。'
+    >
       <RedemptionsTable />
-    </div>
+    </ConsolePageShell>
   );
 };
 

@@ -20,6 +20,7 @@ For commercial licensing, please contact support@quantumnous.com
 import React from 'react';
 import DeploymentsTable from '../../components/table/model-deployments';
 import DeploymentAccessGuard from '../../components/model-deployments/DeploymentAccessGuard';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 import { useModelDeploymentSettings } from '../../hooks/model-deployments/useModelDeploymentSettings';
 
 const ModelDeploymentPage = () => {
@@ -41,9 +42,13 @@ const ModelDeploymentPage = () => {
       connectionError={connectionError}
       onRetry={() => testConnection()}
     >
-      <div className='mt-[60px] px-2'>
+      <ConsolePageShell
+        eyebrow='deployment'
+        title='部署管理'
+        description='统一查看模型部署、连通状态与接入配置，保持部署相关操作更聚焦。'
+      >
         <DeploymentsTable />
-      </div>
+      </ConsolePageShell>
     </DeploymentAccessGuard>
   );
 };

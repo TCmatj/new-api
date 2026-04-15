@@ -18,12 +18,17 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import React from 'react';
 import ModelsTable from '../../components/table/models';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const ModelPage = () => {
   return (
-    <div className='mt-[60px] px-2'>
+    <ConsolePageShell
+      eyebrow='models'
+      title='模型管理'
+      description='在统一界面中维护模型、能力边界与展示策略，减少配置页的碎片感。'
+    >
       <ModelsTable />
-    </div>
+    </ConsolePageShell>
   );
 };
 

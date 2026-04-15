@@ -19,11 +19,16 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import MjLogsTable from '../../components/table/mj-logs';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const Midjourney = () => (
-  <div className='mt-[60px] px-2'>
+  <ConsolePageShell
+    eyebrow='midjourney'
+    title='Midjourney 记录'
+    description='统一查看绘图任务、生成状态与执行历史，保证视觉体验和控制台其余页面一致。'
+  >
     <MjLogsTable />
-  </div>
+  </ConsolePageShell>
 );
 
 export default Midjourney;

@@ -22,18 +22,18 @@ import { Card, Skeleton } from '@douyinfe/semi-ui';
 
 const THEME_COLORS = {
   allVendors: {
-    primary: '37 99 235',
-    background: 'rgba(59, 130, 246, 0.1)',
-    border: 'rgba(59, 130, 246, 0.2)',
+    primary: '93 107 128',
+    background: 'rgba(148, 163, 184, 0.12)',
+    border: 'rgba(148, 163, 184, 0.22)',
   },
   specific: {
-    primary: '16 185 129',
-    background: 'rgba(16, 185, 129, 0.1)',
-    border: 'rgba(16, 185, 129, 0.2)',
+    primary: '120 113 108',
+    background: 'rgba(226, 232, 240, 0.9)',
+    border: 'rgba(203, 213, 225, 0.95)',
   },
   neutral: {
-    background: 'rgba(156, 163, 175, 0.1)',
-    border: 'rgba(156, 163, 175, 0.2)',
+    background: 'rgba(203, 213, 225, 0.22)',
+    border: 'rgba(203, 213, 225, 0.38)',
   },
 };
 
@@ -49,24 +49,32 @@ const SIZES = {
 const SKELETON_STYLES = {
   cover: (primaryColor) => ({
     '--palette-primary-darkerChannel': primaryColor,
-    backgroundImage: `linear-gradient(0deg, rgba(var(--palette-primary-darkerChannel) / 80%), rgba(var(--palette-primary-darkerChannel) / 80%)), url('/cover-4.webp')`,
+    backgroundImage: `linear-gradient(135deg, rgba(241,245,249,0.98) 0%, rgba(232,238,245,0.96) 52%, rgba(var(--palette-primary-darkerChannel) / 0.22) 100%)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
+    borderBottom: '1px solid rgba(226, 232, 240, 0.9)',
+  }),
+  darkCover: () => ({
+    backgroundImage: 'linear-gradient(135deg, rgba(14, 23, 38, 0.98) 0%, rgba(21, 34, 52, 0.96) 52%, rgba(71, 85, 105, 0.34) 100%)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    borderBottom: '1px solid rgba(51, 65, 85, 0.82)',
   }),
   title: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    backgroundColor: 'rgba(148, 163, 184, 0.18)',
     borderRadius: 8,
     backdropFilter: 'blur(4px)',
   },
   tag: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.72)',
     borderRadius: 9999,
     backdropFilter: 'blur(4px)',
-    border: '1px solid rgba(255,255,255,0.3)',
+    border: '1px solid rgba(226,232,240,0.9)',
   },
   description: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(148, 163, 184, 0.14)',
     borderRadius: 4,
     backdropFilter: 'blur(4px)',
   },
@@ -102,14 +110,19 @@ const PricingVendorIntroSkeleton = memo(
       <Card
         className='!rounded-2xl shadow-sm border-0'
         cover={
-          <div
-            className='relative h-full'
-            style={SKELETON_STYLES.cover(
-              isAllVendors
-                ? THEME_COLORS.allVendors.primary
-                : THEME_COLORS.specific.primary,
-            )}
-          >
+          <div className='relative h-full'>
+            <div
+              className='absolute inset-0 dark:hidden'
+              style={SKELETON_STYLES.cover(
+                isAllVendors
+                  ? THEME_COLORS.allVendors.primary
+                  : THEME_COLORS.specific.primary,
+              )}
+            />
+            <div
+              className='absolute inset-0 hidden dark:block'
+              style={SKELETON_STYLES.darkCover()}
+            />
             <div className='relative z-10 h-full flex items-center justify-between p-4'>
               <div className='flex-1 min-w-0 mr-4'>
                 <div className='flex flex-row flex-wrap items-center gap-2 sm:gap-3 mb-2'>
@@ -153,7 +166,7 @@ const PricingVendorIntroSkeleton = memo(
                 </div>
               </div>
 
-              <div className='flex-shrink-0 w-16 h-16 rounded-2xl bg-white/90 shadow-md backdrop-blur-sm flex items-center justify-center'>
+              <div className='flex-shrink-0 w-16 h-16 rounded-2xl bg-white/92 shadow-md backdrop-blur-sm flex items-center justify-center border border-slate-200/70'>
                 {createSkeletonRect(
                   {
                     ...SKELETON_STYLES.avatar(isAllVendors),

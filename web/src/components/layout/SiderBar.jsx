@@ -27,6 +27,7 @@ import { useSidebar } from '../../hooks/common/useSidebar';
 import { useMinimumLoadingTime } from '../../hooks/common/useMinimumLoadingTime';
 import { isAdmin, isRoot, showError } from '../../helpers';
 import SkeletonWrapper from './components/SkeletonWrapper';
+import { useActualTheme } from '../../context/Theme';
 
 import { Nav, Divider, Button } from '@douyinfe/semi-ui';
 
@@ -53,6 +54,7 @@ const routerMap = {
 
 const SiderBar = ({ onNavigate = () => {} }) => {
   const { t } = useTranslation();
+  const actualTheme = useActualTheme();
   const [collapsed, toggleCollapsed] = useSidebarCollapsed();
   const {
     isModuleVisible,
@@ -207,11 +209,6 @@ const SiderBar = ({ onNavigate = () => {} }) => {
         itemKey: 'playground',
         to: '/playground',
       },
-      {
-        text: t('聊天'),
-        itemKey: 'chat',
-        items: chatItems,
-      },
     ];
 
     // 根据配置过滤项目
@@ -251,10 +248,8 @@ const SiderBar = ({ onNavigate = () => {} }) => {
             for (let key in chats[i]) {
               let link = chats[i][key];
               if (typeof link !== 'string') continue; // 确保链接是字符串
-              if (link.startsWith('fluent') || link.startsWith('ccswitch')) {
-                shouldSkip = true;
-                break;
-              }
+              shouldSkip = true;
+              break;
               chat.text = key;
               chat.itemKey = 'chat' + i;
               chat.to = '/console/chat/' + i;
@@ -388,7 +383,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
 
   return (
     <div
-      className='sidebar-container'
+      className='sidebar-container rounded-r-[34px] border-r border-black/5 bg-[var(--opencub-sidebar-light)] px-2 py-4 shadow-[0_24px_80px_rgba(31,41,55,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-[var(--opencub-sidebar-dark)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.32)]'
       style={{
         width: 'var(--sidebar-current-width)',
       }}
@@ -401,7 +396,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
         showAdmin={isAdmin()}
       >
         <Nav
-          className='sidebar-nav'
+          className='sidebar-nav rounded-[28px] border border-black/5 bg-[var(--opencub-sidebar-light-inner)] px-2 py-3 dark:border-white/10 dark:bg-[var(--opencub-sidebar-dark-inner)]'
           defaultIsCollapsed={collapsed}
           isCollapsed={collapsed}
           onCollapseChange={toggleCollapsed}
@@ -443,7 +438,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
           {hasSectionVisibleModules('chat') && (
             <div className='sidebar-section'>
               {!collapsed && (
-                <div className='sidebar-group-label'>{t('聊天')}</div>
+                <div className='sidebar-group-label px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500'>{t('聊天')}</div>
               )}
               {chatMenuItems.map((item) => renderSubItem(item))}
             </div>
@@ -455,7 +450,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
               <Divider className='sidebar-divider' />
               <div>
                 {!collapsed && (
-                  <div className='sidebar-group-label'>{t('控制台')}</div>
+                  <div className='sidebar-group-label px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500'>{t('控制台')}</div>
                 )}
                 {workspaceItems.map((item) => renderNavItem(item))}
               </div>
@@ -468,7 +463,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
               <Divider className='sidebar-divider' />
               <div>
                 {!collapsed && (
-                  <div className='sidebar-group-label'>{t('个人中心')}</div>
+                  <div className='sidebar-group-label px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500'>{t('个人中心')}</div>
                 )}
                 {financeItems.map((item) => renderNavItem(item))}
               </div>
@@ -481,7 +476,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
               <Divider className='sidebar-divider' />
               <div>
                 {!collapsed && (
-                  <div className='sidebar-group-label'>{t('管理员')}</div>
+                  <div className='sidebar-group-label px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500'>{t('管理员')}</div>
                 )}
                 {adminItems.map((item) => renderNavItem(item))}
               </div>
@@ -491,7 +486,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
       </SkeletonWrapper>
 
       {/* 底部折叠按钮 */}
-      <div className='sidebar-collapse-button'>
+      <div className='sidebar-collapse-button bg-transparent'>
         <SkeletonWrapper
           loading={showSkeleton}
           type='button'
@@ -507,7 +502,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
               <ChevronLeft
                 size={16}
                 strokeWidth={2.5}
-                color='var(--semi-color-text-2)'
+                color='currentColor'
                 style={{
                   transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)',
                 }}
@@ -515,11 +510,25 @@ const SiderBar = ({ onNavigate = () => {} }) => {
             }
             onClick={toggleCollapsed}
             icononly={collapsed}
-            style={
-              collapsed
-                ? { width: 36, height: 24, padding: 0 }
-                : { padding: '4px 12px', width: '100%' }
-            }
+            style={{
+              width: collapsed ? 40 : '100%',
+              height: 28,
+              padding: collapsed ? 0 : '6px 14px',
+              borderRadius: 999,
+              background:
+                actualTheme === 'dark'
+                  ? 'color-mix(in srgb, var(--opencub-sidebar-dark-inner) 86%, white 14%)'
+                  : 'color-mix(in srgb, var(--opencub-sidebar-light-inner) 82%, white 18%)',
+              border:
+                actualTheme === 'dark'
+                  ? '1px solid rgba(255,255,255,0.10)'
+                  : '1px solid rgba(214, 221, 228, 0.72)',
+              color: actualTheme === 'dark' ? '#e2e8f0' : '#475569',
+              boxShadow:
+                actualTheme === 'dark'
+                  ? '0 10px 26px rgba(0,0,0,0.22)'
+                  : '0 8px 22px rgba(31,41,55,0.06)',
+            }}
           >
             {!collapsed ? t('收起侧边栏') : null}
           </Button>

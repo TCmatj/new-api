@@ -21,11 +21,8 @@ import React from 'react';
 import { Card, Tag, Timeline, Empty } from '@douyinfe/semi-ui';
 import { Bell } from 'lucide-react';
 import { marked } from 'marked';
-import {
-  IllustrationConstruction,
-  IllustrationConstructionDark,
-} from '@douyinfe/semi-illustrations';
 import ScrollableContainer from '../common/ui/ScrollableContainer';
+import EmptyStateIcon from '../common/EmptyStateIcon';
 
 const AnnouncementsPanel = ({
   announcementData,
@@ -109,10 +106,7 @@ const AnnouncementsPanel = ({
         ) : (
           <div className='flex justify-center items-center py-8'>
             <Empty
-              image={<IllustrationConstruction style={ILLUSTRATION_SIZE} />}
-              darkModeImage={
-                <IllustrationConstructionDark style={ILLUSTRATION_SIZE} />
-              }
+              image={<EmptyStateIcon icon={Bell} accent='amber' />}
               title={t('暂无系统公告')}
               description={t('请联系管理员在系统设置中配置公告信息')}
             />

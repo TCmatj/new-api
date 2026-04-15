@@ -30,13 +30,10 @@ import {
   Switch,
   Tooltip,
 } from '@douyinfe/semi-ui';
-import {
-  IllustrationNoResult,
-  IllustrationNoResultDark,
-} from '@douyinfe/semi-illustrations';
 import { Plus, Edit, Trash2, Save, HelpCircle } from 'lucide-react';
 import { API, showError, showSuccess } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+import EmptyStateIcon from '../../../components/common/EmptyStateIcon';
 
 const { Text } = Typography;
 
@@ -416,12 +413,7 @@ const SettingsFAQ = ({ options, refresh }) => {
           loading={loading}
           empty={
             <Empty
-              image={
-                <IllustrationNoResult style={{ width: 150, height: 150 }} />
-              }
-              darkModeImage={
-                <IllustrationNoResultDark style={{ width: 150, height: 150 }} />
-              }
+              image={<EmptyStateIcon icon={HelpCircle} accent='emerald' />}
               description={t('暂无常见问答')}
               style={{ padding: 30 }}
             />

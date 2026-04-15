@@ -20,11 +20,8 @@ For commercial licensing, please contact support@quantumnous.com
 import React from 'react';
 import { Card, Avatar, Tag, Divider, Empty } from '@douyinfe/semi-ui';
 import { Server, Gauge, ExternalLink, Copy } from 'lucide-react';
-import {
-  IllustrationConstruction,
-  IllustrationConstructionDark,
-} from '@douyinfe/semi-illustrations';
 import ScrollableContainer from '../common/ui/ScrollableContainer';
+import EmptyStateIcon from '../common/EmptyStateIcon';
 
 const ApiInfoPanel = ({
   apiInfoData,
@@ -109,10 +106,7 @@ const ApiInfoPanel = ({
         ) : (
           <div className='flex justify-center items-center min-h-[20rem] w-full'>
             <Empty
-              image={<IllustrationConstruction style={ILLUSTRATION_SIZE} />}
-              darkModeImage={
-                <IllustrationConstructionDark style={ILLUSTRATION_SIZE} />
-              }
+              image={<EmptyStateIcon icon={Server} accent='blue' />}
               title={t('暂无API信息')}
               description={t('请联系管理员在系统设置中配置API信息')}
             />

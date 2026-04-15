@@ -29,6 +29,7 @@ const ActionButtons = ({
   unreadCount,
   onNoticeOpen,
   theme,
+  actualTheme,
   onThemeToggle,
   currentLang,
   onLanguageChange,
@@ -41,7 +42,23 @@ const ActionButtons = ({
   t,
 }) => {
   return (
-    <div className='flex items-center gap-2 md:gap-3'>
+    <div
+      className='flex items-center gap-2 rounded-full px-2 py-2 backdrop-blur-md md:gap-3 md:px-3'
+      style={{
+        border:
+          actualTheme === 'dark'
+            ? '1px solid rgba(255,255,255,0.10)'
+            : '1px solid rgba(222,226,231,0.72)',
+        background:
+          actualTheme === 'dark'
+            ? 'linear-gradient(135deg, rgba(10,18,30,0.88) 0%, rgba(18,29,45,0.82) 100%)'
+            : 'rgba(252,248,243,0.84)',
+        boxShadow:
+          actualTheme === 'dark'
+            ? '0 14px 34px rgba(0,0,0,0.22)'
+            : '0 10px 30px rgba(31,41,55,0.04)',
+      }}
+    >
       <NewYearButton isNewYear={isNewYear} />
 
       <NotificationButton

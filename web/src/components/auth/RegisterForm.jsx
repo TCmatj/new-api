@@ -64,6 +64,8 @@ import { UserContext } from '../../context/User';
 import { StatusContext } from '../../context/Status';
 import { useTranslation } from 'react-i18next';
 import { SiDiscord } from 'react-icons/si';
+import AuthShell from './AuthShell';
+import { applyDocumentTitle } from '../../helpers/documentTitle';
 
 const RegisterForm = () => {
   let navigate = useNavigate();
@@ -144,6 +146,7 @@ const RegisterForm = () => {
   const [showEmailVerification, setShowEmailVerification] = useState(false);
 
   useEffect(() => {
+    applyDocumentTitle(t('注册'));
     setShowEmailVerification(!!status?.email_verification);
     if (status?.turnstile_check) {
       setTurnstileEnabled(true);
@@ -395,20 +398,8 @@ const RegisterForm = () => {
     return (
       <div className='flex flex-col items-center'>
         <div className='w-full max-w-md'>
-          <div className='flex items-center justify-center mb-6 gap-2'>
-            <img src={logo} alt='Logo' className='h-10 rounded-full' />
-            <Title heading={3} className='!text-gray-800'>
-              {systemName}
-            </Title>
-          </div>
-
-          <Card className='border-0 !rounded-2xl overflow-hidden'>
-            <div className='flex justify-center pt-6 pb-2'>
-              <Title heading={3} className='text-gray-800 dark:text-gray-200'>
-                {t('注 册')}
-              </Title>
-            </div>
-            <div className='px-2 py-8'>
+          <Card className='border-0 !rounded-2xl overflow-hidden !bg-transparent !shadow-none'>
+            <div className='px-0 py-0'>
               <div className='space-y-3'>
                 {status.wechat_login && (
                   <Button
@@ -558,20 +549,8 @@ const RegisterForm = () => {
     return (
       <div className='flex flex-col items-center'>
         <div className='w-full max-w-md'>
-          <div className='flex items-center justify-center mb-6 gap-2'>
-            <img src={logo} alt='Logo' className='h-10 rounded-full' />
-            <Title heading={3} className='!text-gray-800'>
-              {systemName}
-            </Title>
-          </div>
-
-          <Card className='border-0 !rounded-2xl overflow-hidden'>
-            <div className='flex justify-center pt-6 pb-2'>
-              <Title heading={3} className='text-gray-800 dark:text-gray-200'>
-                {t('注 册')}
-              </Title>
-            </div>
-            <div className='px-2 py-8'>
+          <Card className='border-0 !rounded-2xl overflow-hidden !bg-transparent !shadow-none'>
+            <div className='px-0 py-0'>
               <Form className='space-y-3'>
                 <Form.Input
                   field='username'
@@ -770,25 +749,14 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className='relative overflow-hidden bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8'>
-      {/* 背景模糊晕染球 */}
-      <div
-        className='blur-ball blur-ball-indigo'
-        style={{ top: '-80px', right: '-80px', transform: 'none' }}
-      />
-      <div
-        className='blur-ball blur-ball-teal'
-        style={{ top: '50%', left: '-120px' }}
-      />
-      <div className='w-full max-w-sm mt-[60px]'>
-        {showEmailRegister ||
-        !hasOAuthRegisterOptions
-          ? renderEmailRegisterForm()
-          : renderOAuthOptions()}
-        {renderWeChatLoginModal()}
-
-        {turnstileEnabled && (
-          <div className='flex justify-center mt-6'>
+    <AuthShell
+      logo={logo}
+      systemName={systemName}
+      title={t('创建账户')}
+      subtitle={t('延续统一、克制、易用的控制台体验，快速完成注册。')}
+      footer={
+        turnstileEnabled ? (
+          <div className='flex justify-center'>
             <Turnstile
               sitekey={turnstileSiteKey}
               onVerify={(token) => {
@@ -796,9 +764,17 @@ const RegisterForm = () => {
               }}
             />
           </div>
-        )}
+        ) : null
+      }
+    >
+      <div className='w-full'>
+        {showEmailRegister ||
+        !hasOAuthRegisterOptions
+          ? renderEmailRegisterForm()
+          : renderOAuthOptions()}
+        {renderWeChatLoginModal()}
       </div>
-    </div>
+    </AuthShell>
   );
 };
 

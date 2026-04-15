@@ -28,6 +28,7 @@ import {
 } from '@douyinfe/semi-ui';
 import { getLobeHubIcon } from '../../../../../helpers';
 import SearchActions from './SearchActions';
+import { useActualTheme } from '../../../../../context/Theme';
 
 const { Paragraph } = Typography;
 
@@ -39,26 +40,34 @@ const CONFIG = {
 
 const THEME_COLORS = {
   allVendors: {
-    primary: '37 99 235',
-    background: 'rgba(59, 130, 246, 0.08)',
+    primary: '93 107 128',
+    background: 'rgba(148, 163, 184, 0.14)',
   },
   specific: {
-    primary: '16 185 129',
-    background: 'rgba(16, 185, 129, 0.1)',
+    primary: '120 113 108',
+    background: 'rgba(226, 232, 240, 0.92)',
   },
 };
 
 const COMPONENT_STYLES = {
   tag: {
-    backgroundColor: 'rgba(255,255,255,0.95)',
+    backgroundColor: 'rgba(255,255,255,0.92)',
     color: '#1f2937',
-    border: '1px solid rgba(255,255,255,0.8)',
+    border: '1px solid rgba(226,232,240,0.9)',
     fontWeight: '500',
   },
   avatarContainer:
-    'w-16 h-16 rounded-2xl bg-white/90 shadow-md backdrop-blur-sm flex items-center justify-center',
-  titleText: { color: 'white' },
-  descriptionText: { color: 'rgba(255,255,255,0.9)' },
+    'w-16 h-16 rounded-2xl bg-white/92 shadow-md backdrop-blur-sm flex items-center justify-center border border-slate-200/70 dark:bg-[rgba(15,23,42,0.82)] dark:border-slate-700/70',
+  titleText: { color: '#0f172a' },
+  descriptionText: { color: 'rgba(51, 65, 85, 0.88)' },
+  darkTitleText: { color: 'rgba(248, 250, 252, 0.98)' },
+  darkDescriptionText: { color: 'rgba(224, 232, 240, 0.95)' },
+  darkTag: {
+    backgroundColor: 'rgba(15,23,42,0.58)',
+    color: 'rgba(248,250,252,0.98)',
+    border: '1px solid rgba(100,116,139,0.82)',
+    fontWeight: '500',
+  },
 };
 
 const CONTENT_TEXTS = {
@@ -84,8 +93,24 @@ const getVendorDisplayName = (vendorName, t) => {
     : vendorName;
 };
 
-const createDefaultAvatar = () => (
-  <div className={COMPONENT_STYLES.avatarContainer}>
+const createDefaultAvatar = (actualTheme) => (
+  <div
+    className='w-16 h-16 rounded-2xl flex items-center justify-center backdrop-blur-sm'
+    style={{
+      background:
+        actualTheme === 'dark'
+          ? 'linear-gradient(135deg, rgba(12,20,32,0.92) 0%, rgba(20,31,47,0.88) 100%)'
+          : 'linear-gradient(135deg, rgba(255,255,255,0.94) 0%, rgba(246,241,235,0.92) 100%)',
+      border:
+        actualTheme === 'dark'
+          ? '1px solid rgba(100,116,139,0.42)'
+          : '1px solid rgba(226,232,240,0.82)',
+      boxShadow:
+        actualTheme === 'dark'
+          ? '0 14px 32px rgba(2,6,23,0.28)'
+          : '0 12px 28px rgba(148,163,184,0.16)',
+    }}
+  >
     <Avatar size='large' color='transparent'>
       AI
     </Avatar>
@@ -117,9 +142,14 @@ const createAvatarContent = (vendor, isAllVendors) => {
   );
 };
 
-const renderVendorAvatar = (vendor, t, isAllVendors = false) => {
+const renderVendorAvatar = (
+  vendor,
+  t,
+  actualTheme,
+  isAllVendors = false,
+) => {
   if (!vendor) {
-    return createDefaultAvatar();
+    return createDefaultAvatar(actualTheme);
   }
 
   const displayName = getVendorDisplayName(vendor.name, t);
@@ -127,7 +157,25 @@ const renderVendorAvatar = (vendor, t, isAllVendors = false) => {
 
   return (
     <Tooltip content={displayName} position='top'>
-      <div className={COMPONENT_STYLES.avatarContainer}>{avatarContent}</div>
+      <div
+        className='w-16 h-16 rounded-2xl flex items-center justify-center backdrop-blur-sm'
+        style={{
+          background:
+            actualTheme === 'dark'
+              ? 'linear-gradient(135deg, rgba(12,20,32,0.92) 0%, rgba(20,31,47,0.88) 100%)'
+              : 'linear-gradient(135deg, rgba(255,255,255,0.94) 0%, rgba(246,241,235,0.92) 100%)',
+          border:
+            actualTheme === 'dark'
+              ? '1px solid rgba(100,116,139,0.42)'
+              : '1px solid rgba(226,232,240,0.82)',
+          boxShadow:
+            actualTheme === 'dark'
+              ? '0 14px 32px rgba(2,6,23,0.28)'
+              : '0 12px 28px rgba(148,163,184,0.16)',
+        }}
+      >
+        {avatarContent}
+      </div>
     </Tooltip>
   );
 };
@@ -157,6 +205,7 @@ const PricingVendorIntro = memo(
     tokenUnit,
     setTokenUnit,
   }) => {
+    const actualTheme = useActualTheme();
     const [currentOffset, setCurrentOffset] = useState(0);
     const [descModalVisible, setDescModalVisible] = useState(false);
     const [descModalContent, setDescModalContent] = useState('');
@@ -262,10 +311,23 @@ const PricingVendorIntro = memo(
     const createCoverStyle = useCallback(
       (primaryColor) => ({
         '--palette-primary-darkerChannel': primaryColor,
-        backgroundImage: `linear-gradient(0deg, rgba(var(--palette-primary-darkerChannel) / 80%), rgba(var(--palette-primary-darkerChannel) / 80%)), url('/cover-4.webp')`,
+        backgroundImage: `linear-gradient(135deg, rgba(241,245,249,0.98) 0%, rgba(232,238,245,0.96) 52%, rgba(var(--palette-primary-darkerChannel) / 0.22) 100%)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        borderBottom: '1px solid rgba(226, 232, 240, 0.9)',
+      }),
+      [],
+    );
+
+    const createDarkCoverStyle = useCallback(
+      (primaryColor) => ({
+        '--palette-primary-darkerChannel': primaryColor,
+        backgroundImage: 'var(--opencub-vendor-dark)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        borderBottom: '1px solid rgba(51, 65, 85, 0.82)',
       }),
       [],
     );
@@ -318,51 +380,69 @@ const PricingVendorIntro = memo(
     );
 
     const renderHeaderCard = useCallback(
-      ({ title, count, description, rightContent, primaryDarkerChannel }) => (
-        <Card
-          className='!rounded-2xl shadow-sm border-0'
-          cover={
-            <div
-              className='relative h-full'
-              style={createCoverStyle(primaryDarkerChannel)}
-            >
-              <div className='relative z-10 h-full flex items-center justify-between p-4'>
-                <div className='flex-1 min-w-0 mr-4'>
-                  <div className='flex flex-row flex-wrap items-center gap-2 sm:gap-3 mb-2'>
-                    <h2
-                      className='text-lg sm:text-xl font-bold truncate'
-                      style={COMPONENT_STYLES.titleText}
-                    >
-                      {title}
-                    </h2>
-                    <Tag
-                      style={COMPONENT_STYLES.tag}
-                      shape='circle'
-                      size='small'
-                      className='self-center'
-                    >
-                      {t('共 {{count}} 个模型', { count })}
-                    </Tag>
-                  </div>
-                  <Paragraph
-                    className='text-xs sm:text-sm leading-relaxed !mb-0 cursor-pointer'
-                    style={COMPONENT_STYLES.descriptionText}
-                    ellipsis={{ rows: 2 }}
-                    onClick={() => handleOpenDescModal(description)}
-                  >
-                    {description}
-                  </Paragraph>
-                </div>
+      ({ title, count, description, rightContent, primaryDarkerChannel }) => {
+        const isDark = actualTheme === 'dark';
+        const titleStyle = isDark
+          ? COMPONENT_STYLES.darkTitleText
+          : COMPONENT_STYLES.titleText;
+        const descriptionStyle = isDark
+          ? COMPONENT_STYLES.darkDescriptionText
+          : COMPONENT_STYLES.descriptionText;
+        const tagStyle = isDark
+          ? COMPONENT_STYLES.darkTag
+          : COMPONENT_STYLES.tag;
 
-                <div className='flex-shrink-0'>{rightContent}</div>
+        return (
+          <Card
+            className='!rounded-2xl shadow-sm border-0'
+            cover={
+              <div className='relative h-full'>
+                <div
+                  className='absolute inset-0'
+                  style={
+                    isDark
+                      ? createDarkCoverStyle(primaryDarkerChannel)
+                      : createCoverStyle(primaryDarkerChannel)
+                  }
+                />
+                <div className='relative z-10 h-full flex items-center justify-between p-4'>
+                  <div className='flex-1 min-w-0 mr-4'>
+                    <div className='flex flex-row flex-wrap items-center gap-2 sm:gap-3 mb-2'>
+                      <h2
+                        className='text-lg sm:text-xl font-bold truncate'
+                        style={titleStyle}
+                      >
+                        {title}
+                      </h2>
+                      <Tag
+                        style={tagStyle}
+                        shape='circle'
+                        size='small'
+                        className='self-center'
+                      >
+                        {t('共 {{count}} 个模型', { count })}
+                      </Tag>
+                    </div>
+                    <Paragraph
+                      className='text-xs sm:text-sm leading-relaxed !mb-0 cursor-pointer'
+                      style={descriptionStyle}
+                      ellipsis={{ rows: 2 }}
+                      onClick={() => handleOpenDescModal(description)}
+                    >
+                      {description}
+                    </Paragraph>
+                  </div>
+
+                  <div className='flex-shrink-0'>{rightContent}</div>
+                </div>
               </div>
-            </div>
-          }
-        >
-          {renderSearchActions()}
-        </Card>
-      ),
-      [renderSearchActions, createCoverStyle, handleOpenDescModal, t],
+            }
+          >
+            {renderSearchActions()}
+          </Card>
+        );
+      },
+      [actualTheme, renderSearchActions, createCoverStyle, createDarkCoverStyle, handleOpenDescModal, t],
     );
 
     const renderAllVendorsAvatar = useCallback(() => {
@@ -370,8 +450,8 @@ const PricingVendorIntro = memo(
         vendorInfo.length > 0
           ? vendorInfo[currentOffset % vendorInfo.length]
           : null;
-      return renderVendorAvatar(currentVendor, t, true);
-    }, [vendorInfo, currentOffset, t]);
+      return renderVendorAvatar(currentVendor, t, actualTheme, true);
+    }, [vendorInfo, currentOffset, t, actualTheme]);
 
     if (filterVendor === 'all') {
       const headerCard = renderHeaderCard({
@@ -401,7 +481,7 @@ const PricingVendorIntro = memo(
       count: currentModelCount,
       description:
         currentVendor.description || getVendorDescription(currentVendor.name),
-      rightContent: renderVendorAvatar(currentVendor, t, false),
+      rightContent: renderVendorAvatar(currentVendor, t, actualTheme, false),
       primaryDarkerChannel: THEME_COLORS.specific.primary,
     });
 

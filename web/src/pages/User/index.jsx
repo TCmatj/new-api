@@ -19,12 +19,17 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import UsersTable from '../../components/table/users';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const User = () => {
   return (
-    <div className='mt-[60px] px-2'>
+    <ConsolePageShell
+      eyebrow='users'
+      title='用户管理'
+      description='统一查看账户、权限与状态信息，让运维和日常支持工作更顺手。'
+    >
       <UsersTable />
-    </div>
+    </ConsolePageShell>
   );
 };
 

@@ -32,13 +32,10 @@ import { StatusContext } from '../../context/Status';
 import { useActualTheme } from '../../context/Theme';
 import { marked } from 'marked';
 import { useTranslation } from 'react-i18next';
-import {
-  IconGithubLogo,
-  IconPlay,
-  IconFile,
-  IconCopy,
-} from '@douyinfe/semi-icons';
+import { IconPlay, IconCopy } from '@douyinfe/semi-icons';
 import { Link } from 'react-router-dom';
+import { BRAND } from '../../config/brand';
+import { applyDocumentTitle } from '../../helpers/documentTitle';
 import NoticeModal from '../../components/layout/NoticeModal';
 import {
   Moonshot,
@@ -73,13 +70,15 @@ const Home = () => {
   const [homePageContent, setHomePageContent] = useState('');
   const [noticeVisible, setNoticeVisible] = useState(false);
   const isMobile = useIsMobile();
-  const isDemoSiteMode = statusState?.status?.demo_site_enabled || false;
-  const docsLink = statusState?.status?.docs_link || '';
   const serverAddress =
     statusState?.status?.server_address || `${window.location.origin}`;
   const endpointItems = API_ENDPOINTS.map((e) => ({ value: e }));
   const [endpointIndex, setEndpointIndex] = useState(0);
   const isChinese = i18n.language.startsWith('zh');
+  const brandTagline = isChinese ? BRAND.taglineCn : BRAND.taglineEn;
+  const brandDescription = isChinese
+    ? BRAND.descriptionCn
+    : BRAND.descriptionEn;
 
   const displayHomePageContent = async () => {
     setHomePageContent(localStorage.getItem('home_page_content') || '');
@@ -142,6 +141,10 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    applyDocumentTitle();
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setEndpointIndex((prev) => (prev + 1) % endpointItems.length);
     }, 3000);
@@ -158,32 +161,44 @@ const Home = () => {
       {homePageContentLoaded && homePageContent === '' ? (
         <div className='w-full overflow-x-hidden'>
           {/* Banner 部分 */}
-          <div className='w-full border-b border-semi-color-border min-h-[500px] md:min-h-[600px] lg:min-h-[700px] relative overflow-x-hidden'>
+          <div
+            className='relative min-h-[calc(100vh-72px)] w-full overflow-x-hidden'
+            style={{
+              background:
+                actualTheme === 'dark'
+                  ? 'var(--opencub-home-dark)'
+                  : 'var(--opencub-home-light)',
+            }}
+          >
             {/* 背景模糊晕染球 */}
             <div className='blur-ball blur-ball-indigo' />
             <div className='blur-ball blur-ball-teal' />
-            <div className='flex items-center justify-center h-full px-4 py-20 md:py-24 lg:py-32 mt-10'>
+            <div className='flex min-h-[calc(100vh-72px)] items-center justify-center px-5 py-16 md:px-8 md:py-18 lg:px-12 lg:py-20 xl:px-16'>
               {/* 居中内容区 */}
-              <div className='flex flex-col items-center justify-center text-center max-w-4xl mx-auto'>
-                <div className='flex flex-col items-center justify-center mb-6 md:mb-8'>
+              <div className='mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:gap-14'>
+                <div className='mb-6 flex flex-col items-start justify-center text-left md:mb-8'>
+                  <div className='mb-5 inline-flex items-center rounded-full border border-black/5 bg-white/65 px-4 py-1.5 text-sm text-slate-600 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5 dark:text-slate-300'>
+                    <span className='mr-2 inline-block h-2 w-2 rounded-full bg-emerald-500' />
+                    {BRAND.name} · {brandTagline}
+                  </div>
                   <h1
-                    className={`text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-semi-color-text-0 leading-tight ${isChinese ? 'tracking-wide md:tracking-wider' : ''}`}
+                    className={`text-4xl font-semibold leading-[1.05] text-slate-900 dark:text-slate-50 md:text-5xl lg:text-6xl xl:text-[72px] ${isChinese ? 'tracking-wide md:tracking-[0.08em]' : ''}`}
                   >
                     <>
-                      {t('统一的')}
-                      <br />
-                      <span className='shine-text'>{t('大模型接口网关')}</span>
+                      <span className='block'>{t('统一的 AI 接入与')}</span>
+                      <span className='shine-text block mt-2'>{t('简约控制台体验')}</span>
                     </>
                   </h1>
-                  <p className='text-base md:text-lg lg:text-xl text-semi-color-text-1 mt-4 md:mt-6 max-w-xl'>
-                    {t('更好的价格，更好的稳定性，只需要将模型基址替换为：')}
+                  <p className='mt-4 max-w-2xl text-base text-slate-500 dark:text-slate-300 md:mt-6 md:text-lg lg:text-xl'>
+                    {brandDescription}
+                    {t(' 只需要将模型基址替换为下方地址，即可开始接入。')}
                   </p>
                   {/* BASE URL 与端点选择 */}
-                  <div className='flex flex-col md:flex-row items-center justify-center gap-4 w-full mt-4 md:mt-6 max-w-md'>
+                  <div className='mt-5 flex w-full max-w-xl flex-col items-stretch gap-4 md:mt-7'>
                     <Input
                       readonly
                       value={serverAddress}
-                      className='flex-1 !rounded-full'
+                      className='flex-1 !rounded-[24px] !bg-white/72 dark:!bg-[#101a2a]/84'
                       size={isMobile ? 'default' : 'large'}
                       suffix={
                         <div className='flex items-center gap-2'>
@@ -211,58 +226,41 @@ const Home = () => {
                   </div>
                 </div>
 
-                {/* 操作按钮 */}
-                <div className='flex flex-row gap-4 justify-center items-center'>
+                <div className='mt-8 flex flex-col gap-4 sm:flex-row sm:items-center'>
                   <Link to='/console'>
                     <Button
                       theme='solid'
                       type='primary'
                       size={isMobile ? 'default' : 'large'}
-                      className='!rounded-3xl px-8 py-2'
+                      className='!h-12 !rounded-full !border-0 px-8 py-2'
+                      style={{
+                        background:
+                          actualTheme === 'dark'
+                            ? 'linear-gradient(135deg, #d9e7f4 0%, #f2f7fb 100%)'
+                            : 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+                        color: actualTheme === 'dark' ? '#0f172a' : '#ffffff',
+                        boxShadow:
+                          actualTheme === 'dark'
+                            ? '0 18px 40px rgba(8, 15, 28, 0.22)'
+                            : '0 18px 40px rgba(15,23,42,0.2)',
+                      }}
                       icon={<IconPlay />}
                     >
-                      {t('获取密钥')}
+                      {t('进入控制台')}
                     </Button>
                   </Link>
-                  {isDemoSiteMode && statusState?.status?.version ? (
-                    <Button
-                      size={isMobile ? 'default' : 'large'}
-                      className='flex items-center !rounded-3xl px-6 py-2'
-                      icon={<IconGithubLogo />}
-                      onClick={() =>
-                        window.open(
-                          'https://github.com/QuantumNous/new-api',
-                          '_blank',
-                        )
-                      }
-                    >
-                      {statusState.status.version}
-                    </Button>
-                  ) : (
-                    docsLink && (
-                      <Button
-                        size={isMobile ? 'default' : 'large'}
-                        className='flex items-center !rounded-3xl px-6 py-2'
-                        icon={<IconFile />}
-                        onClick={() => window.open(docsLink, '_blank')}
-                      >
-                        {t('文档')}
-                      </Button>
-                    )
-                  )}
                 </div>
 
-                {/* 框架兼容性图标 */}
-                <div className='mt-12 md:mt-16 lg:mt-20 w-full'>
-                  <div className='flex items-center mb-6 md:mb-8 justify-center'>
+                <div className='mt-12 w-full md:mt-16 lg:mt-20'>
+                  <div className='mb-6 flex items-center justify-start md:mb-8'>
                     <Text
                       type='tertiary'
-                      className='text-lg md:text-xl lg:text-2xl font-light'
+                      className='text-lg font-light md:text-xl lg:text-2xl'
                     >
                       {t('支持众多的大模型供应商')}
                     </Text>
                   </div>
-                  <div className='flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto px-4'>
+                  <div className='flex flex-wrap items-center justify-start gap-3 px-1 sm:gap-4 md:gap-6 lg:gap-8'>
                     <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
                       <Moonshot size={40} />
                     </div>
@@ -330,6 +328,7 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>

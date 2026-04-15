@@ -19,12 +19,17 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import ChannelsTable from '../../components/table/channels';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const File = () => {
   return (
-    <div className='mt-[60px] px-2'>
+    <ConsolePageShell
+      eyebrow='channels'
+      title='渠道管理'
+      description='统一维护上游渠道、连通性与策略配置，让日常运营页保持更清晰的阅读和操作节奏。'
+    >
       <ChannelsTable />
-    </div>
+    </ConsolePageShell>
   );
 };
 

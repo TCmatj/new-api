@@ -19,11 +19,16 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import UsageLogsTable from '../../components/table/usage-logs';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const Token = () => (
-  <div className='mt-[60px] px-2'>
+  <ConsolePageShell
+    eyebrow='logs'
+    title='调用日志'
+    description='聚合查看请求记录、消耗情况与异常线索，方便快速定位问题。'
+  >
     <UsageLogsTable />
-  </div>
+  </ConsolePageShell>
 );
 
 export default Token;

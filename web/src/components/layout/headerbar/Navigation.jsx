@@ -27,12 +27,14 @@ const Navigation = ({
   isLoading,
   userState,
   pricingRequireAuth,
+  actualTheme,
 }) => {
   const renderNavLinks = () => {
     const baseClasses =
-      'flex-shrink-0 flex items-center gap-1 font-semibold rounded-md transition-all duration-200 ease-in-out';
-    const hoverClasses = 'hover:text-semi-color-primary';
-    const spacingClasses = isMobile ? 'p-1' : 'p-2';
+      'flex-shrink-0 flex items-center gap-1 rounded-full font-medium text-slate-600 transition-all duration-200 ease-in-out dark:text-slate-300';
+    const hoverClasses =
+      'hover:bg-[rgba(252,248,242,0.98)] hover:text-[#8a6742] hover:shadow-[0_8px_22px_rgba(205,184,158,0.12)] dark:hover:bg-[#182233] dark:hover:text-slate-100';
+    const spacingClasses = isMobile ? 'px-3 py-2' : 'px-4 py-2.5';
 
     const commonLinkClasses = `${baseClasses} ${spacingClasses} ${hoverClasses}`;
 
@@ -70,7 +72,23 @@ const Navigation = ({
   };
 
   return (
-    <nav className='flex flex-1 items-center gap-1 lg:gap-2 mx-2 md:mx-4 overflow-x-auto whitespace-nowrap scrollbar-hide'>
+    <nav
+      className='mx-1 flex flex-1 items-center gap-2 overflow-x-auto whitespace-nowrap rounded-[28px] px-2 py-2 shadow-[0_10px_30px_rgba(28,37,56,0.03)] scrollbar-hide md:mx-0 lg:gap-2'
+      style={{
+        border:
+          actualTheme === 'dark'
+            ? '1px solid rgba(255,255,255,0.10)'
+            : '1px solid rgba(232,235,239,0.88)',
+        background:
+          actualTheme === 'dark'
+            ? 'linear-gradient(135deg, rgba(11,19,31,0.88) 0%, rgba(20,31,47,0.82) 100%)'
+            : 'linear-gradient(135deg, rgba(255,252,248,0.96) 0%, rgba(249,245,239,0.92) 100%)',
+        boxShadow:
+          actualTheme === 'dark'
+            ? '0 14px 34px rgba(0,0,0,0.22)'
+            : '0 10px 30px rgba(28,37,56,0.03)',
+      }}
+    >
       <SkeletonWrapper
         loading={isLoading}
         type='navigation'

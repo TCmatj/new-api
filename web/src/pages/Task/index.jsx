@@ -19,11 +19,16 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import TaskLogsTable from '../../components/table/task-logs';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const Task = () => (
-  <div className='mt-[60px] px-2'>
+  <ConsolePageShell
+    eyebrow='tasks'
+    title='任务记录'
+    description='查看异步任务、执行结果与异常轨迹，减少在日志和状态页之间来回切换。'
+  >
     <TaskLogsTable />
-  </div>
+  </ConsolePageShell>
 );
 
 export default Task;

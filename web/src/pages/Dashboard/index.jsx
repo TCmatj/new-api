@@ -19,11 +19,17 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import Dashboard from '../../components/dashboard';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const Detail = () => (
-  <div className='mt-[60px] px-2'>
+  <ConsolePageShell
+    eyebrow='opencub'
+    title='控制台总览'
+    description='统一查看配额、请求趋势、公告与服务状态，让高频运营信息集中在一个更清爽的工作台里。'
+    contentClassName='p-4 md:p-6'
+  >
     <Dashboard />
-  </div>
+  </ConsolePageShell>
 );
 
 export default Detail;

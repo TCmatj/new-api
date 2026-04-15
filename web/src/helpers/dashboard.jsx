@@ -19,10 +19,8 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import { Progress, Divider, Empty } from '@douyinfe/semi-ui';
-import {
-  IllustrationConstruction,
-  IllustrationConstructionDark,
-} from '@douyinfe/semi-illustrations';
+import { Gauge } from 'lucide-react';
+import EmptyStateIcon from '../components/common/EmptyStateIcon';
 import {
   timestamp2string,
   timestamp2string1,
@@ -178,10 +176,7 @@ export const renderMonitorList = (
     return (
       <div className='flex justify-center items-center py-4'>
         <Empty
-          image={<IllustrationConstruction style={ILLUSTRATION_SIZE} />}
-          darkModeImage={
-            <IllustrationConstructionDark style={ILLUSTRATION_SIZE} />
-          }
+          image={<EmptyStateIcon icon={Gauge} accent='blue' />}
           title={t('暂无监控数据')}
         />
       </div>

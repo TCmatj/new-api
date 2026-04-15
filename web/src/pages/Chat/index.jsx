@@ -54,23 +54,26 @@ const ChatPage = () => {
   const iframeSrc = keys.length > 0 ? comLink(keys[0]) : '';
 
   return !isLoading && iframeSrc ? (
-    <iframe
-      src={iframeSrc}
-      style={{
-        width: '100%',
-        height: 'calc(100vh - 64px)',
-        border: 'none',
-        marginTop: '64px',
-      }}
-      title='Token Frame'
-      allow='camera;microphone'
-    />
+    <div className='mt-[72px] px-3 py-4 md:px-6 md:py-6'>
+      <div className='overflow-hidden rounded-[32px] border border-[var(--opencub-border-light)] bg-[var(--opencub-light-surface)] shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[var(--opencub-dark-surface)]'>
+        <iframe
+          src={iframeSrc}
+          style={{
+            width: '100%',
+            height: 'calc(100vh - 120px)',
+            border: 'none',
+          }}
+          title='Token Frame'
+          allow='camera;microphone'
+        />
+      </div>
+    </div>
   ) : (
-    <div className='fixed inset-0 w-screen h-screen flex items-center justify-center bg-white/80 z-[1000] mt-[60px]'>
-      <div className='flex flex-col items-center'>
+    <div className='fixed inset-0 z-[1000] flex h-screen w-screen items-center justify-center bg-slate-950/8 backdrop-blur-sm'>
+      <div className='flex flex-col items-center rounded-[28px] border border-[var(--opencub-border-light)] bg-[var(--opencub-light-surface-strong)] px-8 py-10 shadow-[0_24px_80px_rgba(15,23,42,0.1)] dark:border-white/10 dark:bg-[var(--opencub-dark-surface)]'>
         <Spin size='large' spinning={true} tip={null} />
         <span
-          className='whitespace-nowrap mt-2 text-center'
+          className='mt-3 whitespace-nowrap text-center text-sm font-medium'
           style={{ color: 'var(--semi-color-primary)' }}
         >
           {t('正在跳转...')}

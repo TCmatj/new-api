@@ -19,12 +19,17 @@ For commercial licensing, please contact support@quantumnous.com
 
 import React from 'react';
 import SubscriptionsPage from '../../components/table/subscriptions';
+import ConsolePageShell from '../../components/layout/ConsolePageShell';
 
 const Subscription = () => {
   return (
-    <div className='mt-[60px] px-2'>
+    <ConsolePageShell
+      eyebrow='subscriptions'
+      title='订阅管理'
+      description='集中查看套餐、订阅关系与可用权益，让运营侧规则维护更直观。'
+    >
       <SubscriptionsPage />
-    </div>
+    </ConsolePageShell>
   );
 };
 

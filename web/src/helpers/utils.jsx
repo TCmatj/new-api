@@ -27,6 +27,7 @@ import {
 } from '../constants/playground.constants';
 import { TABLE_COMPACT_MODES_KEY } from '../constants';
 import { MOBILE_BREAKPOINT } from '../hooks/common/useIsMobile';
+import { BRAND } from '../config/brand';
 
 const HTMLToastContent = ({ htmlContent }) => {
   return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
@@ -48,13 +49,15 @@ export function isRoot() {
 
 export function getSystemName() {
   let system_name = localStorage.getItem('system_name');
-  if (!system_name) return 'New API';
+  if (!system_name) return BRAND.name;
   return system_name;
 }
 
 export function getLogo() {
-  let logo = localStorage.getItem('logo');
-  if (!logo) return '/logo.png';
+  const logo = localStorage.getItem('logo');
+  if (!logo || logo === '/logo.png') {
+    return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23efe2d1"/><stop offset="100%" stop-color="%23d7e7f3"/></linearGradient></defs><rect width="64" height="64" rx="20" fill="url(%23g)"/><text x="50%" y="54%" text-anchor="middle" font-size="22" font-family="Arial,sans-serif" font-weight="700" fill="%23334155">OC</text></svg>';
+  }
   return logo;
 }
 

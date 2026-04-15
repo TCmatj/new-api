@@ -39,6 +39,7 @@ import { UserContext } from '../../context/User';
 import { StatusContext } from '../../context/Status';
 import { useLocation } from 'react-router-dom';
 import { normalizeLanguage } from '../../i18n/language';
+import { applyDocumentTitle } from '../../helpers/documentTitle';
 const { Sider, Content, Header } = Layout;
 
 const PageLayout = () => {
@@ -106,14 +107,12 @@ const PageLayout = () => {
     loadStatus().catch(console.error);
     let systemName = getSystemName();
     if (systemName) {
-      document.title = systemName;
+      applyDocumentTitle();
     }
-    let logo = getLogo();
-    if (logo) {
-      let linkElement = document.querySelector("link[rel~='icon']");
-      if (linkElement) {
-        linkElement.href = logo;
-      }
+    const faviconSvg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23efe2d1"/><stop offset="100%" stop-color="%23d7e7f3"/></linearGradient></defs><rect width="64" height="64" rx="20" fill="url(%23g)"/><text x="50%" y="54%" text-anchor="middle" font-size="22" font-family="Arial,sans-serif" font-weight="700" fill="%23334155">OC</text></svg>';
+    let linkElement = document.querySelector("link[rel~='icon']");
+    if (linkElement) {
+      linkElement.href = faviconSvg;
     }
   }, []);
 
@@ -162,6 +161,7 @@ const PageLayout = () => {
           width: '100%',
           top: 0,
           zIndex: 100,
+          background: 'transparent',
         }}
       >
         <HeaderBar
@@ -213,9 +213,10 @@ const PageLayout = () => {
               flex: '1 0 auto',
               overflowY: isMobile ? 'visible' : 'hidden',
               WebkitOverflowScrolling: 'touch',
-              padding: shouldInnerPadding ? (isMobile ? '5px' : '24px') : '0',
+              padding: shouldInnerPadding ? (isMobile ? '8px' : '28px') : '0',
               position: 'relative',
             }}
+            className='bg-transparent'
           >
             <ErrorBoundary>
               <App />

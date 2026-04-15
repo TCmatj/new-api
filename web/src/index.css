@@ -18,17 +18,85 @@
   --sidebar-width: 180px;
   --sidebar-width-collapsed: 60px;
   --sidebar-current-width: var(--sidebar-width);
+  --opencub-light-bg:
+    radial-gradient(circle at top left, rgba(237, 225, 211, 0.62), transparent 32%),
+    radial-gradient(circle at top right, rgba(210, 227, 239, 0.54), transparent 36%),
+    linear-gradient(180deg, #f6efe6 0%, #eef3f7 48%, #e6eef5 100%);
+  --opencub-dark-bg:
+    radial-gradient(circle at top left, rgba(36, 61, 92, 0.34), transparent 28%),
+    radial-gradient(circle at top right, rgba(24, 39, 62, 0.4), transparent 36%),
+    linear-gradient(180deg, #060b13 0%, #0b1320 48%, #101a2a 100%);
+  --opencub-light-surface: rgba(246, 241, 234, 0.78);
+  --opencub-light-surface-strong: rgba(242, 236, 228, 0.9);
+  --opencub-dark-surface: rgba(16, 24, 38, 0.74);
+  --opencub-border-light: rgba(214, 221, 228, 0.9);
+  --opencub-header-light: rgba(241, 234, 225, 0.86);
+  --opencub-header-dark: rgba(9, 16, 28, 0.84);
+  --opencub-sidebar-light: rgba(232, 223, 212, 0.94);
+  --opencub-sidebar-light-inner: rgba(241, 235, 227, 0.76);
+  --opencub-sidebar-dark: rgba(8, 14, 24, 0.92);
+  --opencub-sidebar-dark-inner: rgba(16, 26, 40, 0.58);
+  --opencub-home-light:
+    radial-gradient(circle at top left, rgba(229, 213, 196, 0.38), transparent 30%),
+    radial-gradient(circle at top right, rgba(191, 214, 229, 0.3), transparent 36%),
+    linear-gradient(180deg, rgba(244, 236, 227, 0.98), rgba(235, 241, 246, 0.96));
+  --opencub-home-dark:
+    radial-gradient(circle at top left, rgba(56, 78, 105, 0.28), transparent 30%),
+    radial-gradient(circle at top right, rgba(24, 42, 66, 0.34), transparent 38%),
+    linear-gradient(180deg, rgba(7, 13, 24, 0.98), rgba(11, 19, 33, 0.98));
+  --opencub-vendor-dark:
+    linear-gradient(135deg, rgba(14, 23, 38, 0.98) 0%, rgba(21, 34, 52, 0.96) 52%, rgba(var(--palette-primary-darkerChannel) / 0.34) 100%);
 }
 
 body.sidebar-collapsed {
   --sidebar-current-width: var(--sidebar-width-collapsed);
 }
 
+html,
+body,
+#root {
+  min-height: 100vh;
+  background: var(--opencub-light-bg) !important;
+}
+
+html.dark,
+html.dark body,
+html.dark #root {
+  background: var(--opencub-dark-bg) !important;
+}
+
 body {
   font-family: Lato, 'Helvetica Neue', Arial, Helvetica, 'Microsoft YaHei',
     sans-serif;
   color: var(--semi-color-text-0);
-  background-color: var(--semi-color-bg-0);
+  background: var(--opencub-light-bg) !important;
+  background-attachment: fixed;
+}
+
+#root {
+  background: transparent;
+}
+
+.semi-layout,
+.semi-layout-content,
+.semi-layout-footer,
+.semi-layout-header,
+.semi-layout-section,
+.semi-layout-section-main {
+  background: transparent !important;
+}
+
+.app-layout {
+  background: var(--opencub-light-bg) !important;
+}
+
+html.dark .app-layout {
+  background: var(--opencub-dark-bg) !important;
+}
+
+::selection {
+  background: rgba(195, 214, 228, 0.42);
+  color: inherit;
 }
 
 /* 桌面端禁止 body 纵向滚动 - 防止 VChart tooltip 触发页面滚动条 */
@@ -54,6 +122,22 @@ code {
 }
 
 /* ==================== 布局相关样式 ==================== */
+.semi-card,
+.semi-modal-content,
+.semi-table-wrapper,
+.semi-navigation,
+.semi-banner {
+  border-radius: 20px;
+}
+
+.semi-input-wrapper,
+.semi-select,
+.semi-button,
+.semi-tag,
+.semi-banner {
+  border-radius: 14px;
+}
+
 .semi-layout::-webkit-scrollbar,
 .semi-layout-content::-webkit-scrollbar,
 .semi-sider::-webkit-scrollbar {
@@ -126,13 +210,17 @@ code {
   flex-direction: column;
   min-height: 0;
   transition: width 0.3s ease;
-  background: var(--semi-color-bg-0);
+  background: var(--opencub-sidebar-light) !important;
+}
+
+html.dark .sidebar-container {
+  background: var(--opencub-sidebar-dark) !important;
 }
 
 .sidebar-nav {
   flex: 1;
   width: 100%;
-  background: var(--semi-color-bg-0);
+  background: var(--opencub-sidebar-light-inner) !important;
   height: 100%;
   overflow-x: hidden;
   border-right: none;
@@ -143,27 +231,43 @@ code {
   -ms-overflow-style: none;
 }
 
+html.dark .sidebar-nav {
+  background: var(--opencub-sidebar-dark-inner) !important;
+}
+
 .sidebar-nav::-webkit-scrollbar {
   display: none;
 }
 
 /* 侧边栏导航项样式 */
 .sidebar-nav-item {
-  border-radius: 6px;
-  margin: 3px 8px;
-  transition: all 0.15s ease;
-  padding: 8px 12px;
+  border-radius: 16px;
+  margin: 4px 6px;
+  transition: all 0.18s ease;
+  padding: 10px 14px;
 }
 
 .sidebar-nav-item:hover {
-  background-color: rgba(var(--semi-blue-0), 0.08);
-  color: var(--semi-color-primary);
+  background-color: rgba(223, 207, 189, 0.46);
+  color: #111827;
 }
 
 .sidebar-nav-item-selected {
-  background-color: rgba(var(--semi-blue-0), 0.12);
-  color: var(--semi-color-primary);
-  font-weight: 500;
+  background: linear-gradient(135deg, rgba(236, 223, 206, 0.96), rgba(209, 225, 238, 0.92));
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+}
+
+html.dark .sidebar-nav-item:hover {
+  background-color: rgba(24, 34, 51, 0.88);
+  color: #f8fafc;
+}
+
+html.dark .sidebar-nav-item-selected {
+  background: linear-gradient(135deg, rgba(24, 34, 51, 0.95), rgba(39, 54, 77, 0.92));
+  color: #f8fafc;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
 }
 
 /* 图标容器样式 */
@@ -190,18 +294,18 @@ code {
 
 /* 分割线样式 */
 .sidebar-divider {
-  margin: 4px 8px;
-  opacity: 0.15;
+  margin: 8px 10px;
+  opacity: 0.12;
 }
 
 /* 分组标签样式 */
 .sidebar-group-label {
-  padding: 4px 15px 8px;
-  color: var(--semi-color-text-2);
-  font-size: 12px;
+  padding: 6px 16px 10px;
+  color: #94a3b8;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  opacity: 0.8;
+  letter-spacing: 0.24em;
+  opacity: 0.92;
 }
 
 /* 底部折叠按钮 */
@@ -212,13 +316,19 @@ code {
   padding: 12px;
   margin-top: auto;
   cursor: pointer;
-  background-color: var(--semi-color-bg-0);
+  background: var(--opencub-sidebar-light) !important;
   position: sticky;
   bottom: 0;
   z-index: 10;
-  box-shadow: 0 -10px 10px -5px var(--semi-color-bg-0);
+  box-shadow: 0 -10px 18px -8px rgba(232, 223, 212, 0.92);
   backdrop-filter: blur(4px);
-  border-top: 1px solid rgba(var(--semi-grey-0), 0.08);
+  border-top: 1px solid rgba(214, 221, 228, 0.72);
+}
+
+html.dark .sidebar-collapse-button {
+  background: var(--opencub-sidebar-dark) !important;
+  box-shadow: 0 -12px 22px -10px rgba(8, 14, 24, 0.94);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .sidebar-collapse-button-inner {
@@ -228,8 +338,12 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--semi-color-fill-0);
+  background: var(--opencub-sidebar-light-inner);
   transition: all 0.2s ease;
+}
+
+html.dark .sidebar-collapse-button-inner {
+  background: var(--opencub-sidebar-dark-inner);
 }
 
 .sidebar-collapse-icon-container {
@@ -244,17 +358,31 @@ code {
 
 @media (max-width: 767px) {
   .sidebar-container {
-    background: var(--semi-color-bg-1);
-    border-right: 1px solid var(--semi-color-border);
+    background: var(--opencub-sidebar-light);
+    border-right: 1px solid var(--opencub-border-light);
+  }
+
+  html.dark .sidebar-container {
+    background: var(--opencub-sidebar-dark);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .sidebar-nav {
-    background: var(--semi-color-bg-1);
+    background: var(--opencub-sidebar-light-inner);
+  }
+
+  html.dark .sidebar-nav {
+    background: var(--opencub-sidebar-dark-inner);
   }
 
   .sidebar-collapse-button {
-    background-color: var(--semi-color-bg-1);
-    box-shadow: 0 -10px 10px -5px var(--semi-color-bg-1);
+    background: var(--opencub-sidebar-light) !important;
+    box-shadow: 0 -10px 18px -8px rgba(232, 223, 212, 0.92);
+  }
+
+  html.dark .sidebar-collapse-button {
+    background: var(--opencub-sidebar-dark) !important;
+    box-shadow: 0 -12px 22px -10px rgba(8, 14, 24, 0.94);
   }
 }
 
