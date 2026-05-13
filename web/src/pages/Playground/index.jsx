@@ -459,8 +459,8 @@ const Playground = () => {
 
   return (
     <PlaygroundProvider value={playgroundContextValue}>
-      <div className='mt-[72px] flex min-h-[calc(100vh-72px)] flex-col px-3 py-4 md:px-6 md:py-6'>
-        <Layout className='flex min-h-0 flex-1 overflow-hidden rounded-[32px] border border-[var(--opencub-border-light)] bg-[var(--opencub-light-surface)] shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[var(--opencub-dark-surface)] md:flex-row'>
+      <div className='flex h-full min-h-0 flex-col px-0 pt-0 pb-0 md:px-4 md:pt-2 md:pb-4 xl:px-5 xl:pt-3 xl:pb-5'>
+        <Layout className='flex min-h-0 flex-1 overflow-hidden rounded-none border-0 bg-[var(--opencub-light-surface)] shadow-none backdrop-blur-xl dark:border-white/10 dark:bg-[var(--opencub-dark-surface)] md:flex-row md:rounded-[28px] md:border md:border-[var(--opencub-border-light)] md:shadow-[0_18px_52px_rgba(15,23,42,0.08)] dark:md:border-white/10'>
           {(showSettings || !isMobile) && (
             <Layout.Sider
               className={`

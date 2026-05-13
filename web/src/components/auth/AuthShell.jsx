@@ -18,7 +18,7 @@ const AuthShell = ({
 
   return (
     <div
-      className='relative min-h-screen overflow-hidden px-4 py-12 sm:px-6 lg:px-8'
+      className='auth-shell relative h-[100dvh] overflow-hidden px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6'
       style={{
         background:
           actualTheme === 'dark'
@@ -29,10 +29,10 @@ const AuthShell = ({
       <div className='blur-ball blur-ball-indigo' style={{ top: '-80px', right: '-80px', transform: 'none' }} />
       <div className='blur-ball blur-ball-teal' style={{ top: '50%', left: '-120px' }} />
 
-      <div className='relative z-10 mx-auto flex min-h-[calc(100vh-6rem)] w-full max-w-6xl items-center justify-center'>
-        <div className='grid w-full grid-cols-1 gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12'>
+      <div className='relative z-10 mx-auto flex h-full w-full max-w-6xl items-center justify-center overflow-hidden'>
+        <div className='grid w-full max-h-full grid-cols-1 gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10'>
           <section
-            className='hidden lg:flex flex-col justify-center rounded-[32px] p-10 shadow-[0_20px_80px_rgba(15,23,42,0.10)] backdrop-blur-xl'
+            className='hidden lg:flex flex-col justify-center overflow-hidden rounded-[32px] p-8 shadow-[0_20px_80px_rgba(15,23,42,0.10)] backdrop-blur-xl'
             style={{
               border:
                 actualTheme === 'dark'
@@ -69,7 +69,7 @@ const AuthShell = ({
             </div>
           </section>
 
-          <section className={`flex flex-col justify-center ${maxWidth} w-full justify-self-center`}>
+          <section className={`flex flex-col justify-center ${maxWidth} w-full justify-self-center overflow-hidden`}>
             <div className='mb-6 flex items-center justify-center gap-3 lg:hidden'>
               <img src={logo} alt='Logo' className='h-11 w-11 rounded-2xl object-cover shadow-sm ring-1 ring-black/5' />
               <div>
@@ -96,7 +96,7 @@ const AuthShell = ({
               }}
             >
               <div
-                className='rounded-[22px] px-5 py-6 sm:px-6 sm:py-7'
+                className='rounded-[22px] px-5 py-5 sm:px-6 sm:py-6'
                 style={{
                   border:
                     actualTheme === 'dark'

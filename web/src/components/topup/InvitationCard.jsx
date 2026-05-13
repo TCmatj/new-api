@@ -28,6 +28,7 @@ import {
   Space,
 } from '@douyinfe/semi-ui';
 import { Copy, Users, BarChart2, TrendingUp, Gift, Zap } from 'lucide-react';
+import { useActualTheme } from '../../context/Theme';
 
 const { Text } = Typography;
 
@@ -39,6 +40,31 @@ const InvitationCard = ({
   affLink,
   handleAffLinkClick,
 }) => {
+  const actualTheme = useActualTheme();
+  const incomeHeroStyle =
+    actualTheme === 'dark'
+      ? {
+          background:
+            'linear-gradient(135deg, rgba(24,52,58,0.96) 0%, rgba(14,34,39,0.94) 52%, rgba(10,24,29,0.98) 100%)',
+          borderBottom: '1px solid rgba(103, 167, 158, 0.22)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)',
+        }
+      : {
+          background:
+            'linear-gradient(135deg, rgba(239,252,249,0.98) 0%, rgba(229,247,242,0.96) 52%, rgba(245,252,249,0.98) 100%)',
+          borderBottom: '1px solid rgba(114, 187, 169, 0.24)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.82)',
+        };
+  const incomeTitleStyle = {
+    color: actualTheme === 'dark' ? '#f0fffb' : '#155f55',
+    fontSize: '16px',
+  };
+  const incomeValueStyle = {
+    color: actualTheme === 'dark' ? '#f5fffd' : '#0f5a4f',
+  };
+  const incomeMetaColor =
+    actualTheme === 'dark' ? 'rgba(205,244,236,0.76)' : 'rgba(41,112,98,0.74)';
+
   return (
     <Card className='!rounded-2xl shadow-sm border-0'>
       {/* 卡片头部 */}
@@ -58,22 +84,30 @@ const InvitationCard = ({
       <Space vertical style={{ width: '100%' }}>
         {/* 统计数据统一卡片 */}
         <Card
-          className='!rounded-xl w-full'
+          className='!rounded-xl w-full overflow-hidden'
+          style={{
+            background:
+              actualTheme === 'dark'
+                ? 'rgba(14, 22, 33, 0.9)'
+                : 'rgba(255, 255, 255, 0.95)',
+            border:
+              actualTheme === 'dark'
+                ? '1px solid rgba(82, 135, 126, 0.24)'
+                : '1px solid rgba(180, 224, 214, 0.82)',
+            boxShadow:
+              actualTheme === 'dark'
+                ? '0 20px 44px rgba(2, 11, 15, 0.34)'
+                : '0 18px 38px rgba(104, 174, 155, 0.16)',
+          }}
           cover={
             <div
               className='relative h-30'
-              style={{
-                '--palette-primary-darkerChannel': '0 75 80',
-                backgroundImage: `linear-gradient(0deg, rgba(var(--palette-primary-darkerChannel) / 80%), rgba(var(--palette-primary-darkerChannel) / 80%)), url('/cover-4.webp')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-              }}
+              style={incomeHeroStyle}
             >
               {/* 标题和按钮 */}
               <div className='relative z-10 h-full flex flex-col justify-between p-4'>
                 <div className='flex justify-between items-center'>
-                  <Text strong style={{ color: 'white', fontSize: '16px' }}>
+                  <Text strong style={incomeTitleStyle}>
                     {t('收益统计')}
                   </Text>
                   <Button
@@ -86,6 +120,17 @@ const InvitationCard = ({
                     }
                     onClick={() => setOpenTransfer(true)}
                     className='!rounded-lg'
+                    style={{
+                      background:
+                        actualTheme === 'dark'
+                          ? 'linear-gradient(135deg, #2f7e71 0%, #245d54 100%)'
+                          : 'linear-gradient(135deg, #37b9a0 0%, #2f9d88 100%)',
+                      border: 'none',
+                      boxShadow:
+                        actualTheme === 'dark'
+                          ? '0 10px 24px rgba(26, 104, 93, 0.32)'
+                          : '0 10px 22px rgba(55, 185, 160, 0.24)',
+                    }}
                   >
                     <Zap size={12} className='mr-1' />
                     {t('划转到余额')}
@@ -96,24 +141,12 @@ const InvitationCard = ({
                 <div className='grid grid-cols-3 gap-6 mt-4'>
                   {/* 待使用收益 */}
                   <div className='text-center'>
-                    <div
-                      className='text-base sm:text-2xl font-bold mb-2'
-                      style={{ color: 'white' }}
-                    >
+                    <div className='text-base sm:text-2xl font-bold mb-2' style={incomeValueStyle}>
                       {renderQuota(userState?.user?.aff_quota || 0)}
                     </div>
                     <div className='flex items-center justify-center text-sm'>
-                      <TrendingUp
-                        size={14}
-                        className='mr-1'
-                        style={{ color: 'rgba(255,255,255,0.8)' }}
-                      />
-                      <Text
-                        style={{
-                          color: 'rgba(255,255,255,0.8)',
-                          fontSize: '12px',
-                        }}
-                      >
+                      <TrendingUp size={14} className='mr-1' style={{ color: incomeMetaColor }} />
+                      <Text style={{ color: incomeMetaColor, fontSize: '12px' }}>
                         {t('待使用收益')}
                       </Text>
                     </div>
@@ -121,24 +154,12 @@ const InvitationCard = ({
 
                   {/* 总收益 */}
                   <div className='text-center'>
-                    <div
-                      className='text-base sm:text-2xl font-bold mb-2'
-                      style={{ color: 'white' }}
-                    >
+                    <div className='text-base sm:text-2xl font-bold mb-2' style={incomeValueStyle}>
                       {renderQuota(userState?.user?.aff_history_quota || 0)}
                     </div>
                     <div className='flex items-center justify-center text-sm'>
-                      <BarChart2
-                        size={14}
-                        className='mr-1'
-                        style={{ color: 'rgba(255,255,255,0.8)' }}
-                      />
-                      <Text
-                        style={{
-                          color: 'rgba(255,255,255,0.8)',
-                          fontSize: '12px',
-                        }}
-                      >
+                      <BarChart2 size={14} className='mr-1' style={{ color: incomeMetaColor }} />
+                      <Text style={{ color: incomeMetaColor, fontSize: '12px' }}>
                         {t('总收益')}
                       </Text>
                     </div>
@@ -146,24 +167,12 @@ const InvitationCard = ({
 
                   {/* 邀请人数 */}
                   <div className='text-center'>
-                    <div
-                      className='text-base sm:text-2xl font-bold mb-2'
-                      style={{ color: 'white' }}
-                    >
+                    <div className='text-base sm:text-2xl font-bold mb-2' style={incomeValueStyle}>
                       {userState?.user?.aff_count || 0}
                     </div>
                     <div className='flex items-center justify-center text-sm'>
-                      <Users
-                        size={14}
-                        className='mr-1'
-                        style={{ color: 'rgba(255,255,255,0.8)' }}
-                      />
-                      <Text
-                        style={{
-                          color: 'rgba(255,255,255,0.8)',
-                          fontSize: '12px',
-                        }}
-                      >
+                      <Users size={14} className='mr-1' style={{ color: incomeMetaColor }} />
+                      <Text style={{ color: incomeMetaColor, fontSize: '12px' }}>
                         {t('邀请人数')}
                       </Text>
                     </div>

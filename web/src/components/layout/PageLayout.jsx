@@ -63,12 +63,20 @@ const PageLayout = () => {
     '/pricing',
   ];
 
-  const shouldHideFooter = cardProPages.includes(location.pathname);
+  const isHomeRoute = location.pathname === '/';
+  const isPlaygroundRoute = location.pathname === '/console/playground';
+  const isModelDeploymentRoute =
+    location.pathname === '/console/deployment';
+
+  const shouldHideFooter =
+    cardProPages.includes(location.pathname) ||
+    isHomeRoute ||
+    isModelDeploymentRoute;
 
   const shouldInnerPadding =
     location.pathname.includes('/console') &&
     !location.pathname.startsWith('/console/chat') &&
-    location.pathname !== '/console/playground';
+    !isPlaygroundRoute;
 
   const isConsoleRoute = location.pathname.startsWith('/console');
   const showSider = isConsoleRoute && (!isMobile || drawerOpen);
@@ -182,7 +190,7 @@ const PageLayout = () => {
             style={{
               position: 'fixed',
               left: 0,
-              top: '64px',
+              top: '82px',
               zIndex: 99,
               border: 'none',
               paddingRight: '0',
@@ -203,6 +211,7 @@ const PageLayout = () => {
               : showSider
                 ? 'var(--sidebar-current-width)'
                 : '0',
+            paddingTop: isMobile ? '84px' : '94px',
             flex: '1 1 auto',
             display: 'flex',
             flexDirection: 'column',
@@ -211,10 +220,17 @@ const PageLayout = () => {
           <Content
             style={{
               flex: '1 0 auto',
-              overflowY: isMobile ? 'visible' : 'hidden',
+              overflowY: isModelDeploymentRoute ? 'hidden' : isMobile ? 'visible' : 'hidden',
               WebkitOverflowScrolling: 'touch',
-              padding: shouldInnerPadding ? (isMobile ? '8px' : '28px') : '0',
+              padding: isModelDeploymentRoute
+                ? '0'
+                : shouldInnerPadding
+                  ? (isMobile ? '12px 8px 8px' : '18px 28px 28px')
+                  : '0',
               position: 'relative',
+              display: isModelDeploymentRoute ? 'flex' : 'block',
+              alignItems: isModelDeploymentRoute ? 'center' : 'stretch',
+              justifyContent: isModelDeploymentRoute ? 'center' : 'flex-start',
             }}
             className='bg-transparent'
           >

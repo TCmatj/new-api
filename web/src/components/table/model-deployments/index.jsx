@@ -102,6 +102,7 @@ const DeploymentsPage = () => {
       {/* Main Content */}
       <CardPro
         type='type3'
+        className='deployment-card-pro'
         actionsArea={
           <div className='flex flex-col md:flex-row justify-between items-center gap-2 w-full'>
             <DeploymentsActions

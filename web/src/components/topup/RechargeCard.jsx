@@ -48,6 +48,7 @@ import {
 import { IconGift } from '@douyinfe/semi-icons';
 import { useMinimumLoadingTime } from '../../hooks/common/useMinimumLoadingTime';
 import { getCurrencyConfig } from '../../helpers/render';
+import { useActualTheme } from '../../context/Theme';
 import SubscriptionPlansCard from './SubscriptionPlansCard';
 
 const { Text } = Typography;
@@ -102,9 +103,33 @@ const RechargeCard = ({
   const redeemFormApiRef = useRef(null);
   const initialTabSetRef = useRef(false);
   const showAmountSkeleton = useMinimumLoadingTime(amountLoading);
+  const actualTheme = useActualTheme();
   const [activeTab, setActiveTab] = useState('topup');
   const shouldShowSubscription =
     !subscriptionLoading && subscriptionPlans.length > 0;
+  const statsHeroStyle =
+    actualTheme === 'dark'
+      ? {
+          background:
+            'linear-gradient(135deg, rgba(25,39,64,0.96) 0%, rgba(19,28,47,0.94) 52%, rgba(16,23,38,0.98) 100%)',
+          borderBottom: '1px solid rgba(104, 139, 197, 0.26)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)',
+        }
+      : {
+          background:
+            'linear-gradient(135deg, rgba(243,248,255,0.98) 0%, rgba(233,242,255,0.96) 48%, rgba(248,250,255,0.98) 100%)',
+          borderBottom: '1px solid rgba(125, 158, 214, 0.28)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.75)',
+        };
+  const statsTitleStyle = {
+    color: actualTheme === 'dark' ? '#f3f7ff' : '#1f3a68',
+    fontSize: '16px',
+  };
+  const statsValueStyle = {
+    color: actualTheme === 'dark' ? '#f8fbff' : '#16345e',
+  };
+  const statsMetaColor =
+    actualTheme === 'dark' ? 'rgba(214,228,255,0.78)' : 'rgba(63,96,148,0.78)';
 
   useEffect(() => {
     if (initialTabSetRef.current) return;
@@ -122,21 +147,29 @@ const RechargeCard = ({
     <Space vertical style={{ width: '100%' }}>
       {/* 统计数据 */}
       <Card
-        className='!rounded-xl w-full'
+        className='!rounded-xl w-full overflow-hidden'
+        style={{
+          background:
+            actualTheme === 'dark'
+              ? 'rgba(14, 22, 36, 0.9)'
+              : 'rgba(255, 255, 255, 0.94)',
+          border:
+            actualTheme === 'dark'
+              ? '1px solid rgba(96, 118, 156, 0.22)'
+              : '1px solid rgba(189, 205, 232, 0.72)',
+          boxShadow:
+            actualTheme === 'dark'
+              ? '0 20px 44px rgba(3, 10, 22, 0.34)'
+              : '0 18px 38px rgba(125, 152, 194, 0.16)',
+        }}
         cover={
           <div
             className='relative h-30'
-            style={{
-              '--palette-primary-darkerChannel': '37 99 235',
-              backgroundImage: `linear-gradient(0deg, rgba(var(--palette-primary-darkerChannel) / 80%), rgba(var(--palette-primary-darkerChannel) / 80%)), url('/cover-4.webp')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-            }}
+            style={statsHeroStyle}
           >
             <div className='relative z-10 h-full flex flex-col justify-between p-4'>
               <div className='flex justify-between items-center'>
-                <Text strong style={{ color: 'white', fontSize: '16px' }}>
+                <Text strong style={statsTitleStyle}>
                   {t('账户统计')}
                 </Text>
               </div>
@@ -145,24 +178,12 @@ const RechargeCard = ({
               <div className='grid grid-cols-3 gap-6 mt-4'>
                 {/* 当前余额 */}
                 <div className='text-center'>
-                  <div
-                    className='text-base sm:text-2xl font-bold mb-2'
-                    style={{ color: 'white' }}
-                  >
+                  <div className='text-base sm:text-2xl font-bold mb-2' style={statsValueStyle}>
                     {renderQuota(userState?.user?.quota)}
                   </div>
                   <div className='flex items-center justify-center text-sm'>
-                    <Wallet
-                      size={14}
-                      className='mr-1'
-                      style={{ color: 'rgba(255,255,255,0.8)' }}
-                    />
-                    <Text
-                      style={{
-                        color: 'rgba(255,255,255,0.8)',
-                        fontSize: '12px',
-                      }}
-                    >
+                    <Wallet size={14} className='mr-1' style={{ color: statsMetaColor }} />
+                    <Text style={{ color: statsMetaColor, fontSize: '12px' }}>
                       {t('当前余额')}
                     </Text>
                   </div>
@@ -170,24 +191,12 @@ const RechargeCard = ({
 
                 {/* 历史消耗 */}
                 <div className='text-center'>
-                  <div
-                    className='text-base sm:text-2xl font-bold mb-2'
-                    style={{ color: 'white' }}
-                  >
+                  <div className='text-base sm:text-2xl font-bold mb-2' style={statsValueStyle}>
                     {renderQuota(userState?.user?.used_quota)}
                   </div>
                   <div className='flex items-center justify-center text-sm'>
-                    <TrendingUp
-                      size={14}
-                      className='mr-1'
-                      style={{ color: 'rgba(255,255,255,0.8)' }}
-                    />
-                    <Text
-                      style={{
-                        color: 'rgba(255,255,255,0.8)',
-                        fontSize: '12px',
-                      }}
-                    >
+                    <TrendingUp size={14} className='mr-1' style={{ color: statsMetaColor }} />
+                    <Text style={{ color: statsMetaColor, fontSize: '12px' }}>
                       {t('历史消耗')}
                     </Text>
                   </div>
@@ -195,24 +204,12 @@ const RechargeCard = ({
 
                 {/* 请求次数 */}
                 <div className='text-center'>
-                  <div
-                    className='text-base sm:text-2xl font-bold mb-2'
-                    style={{ color: 'white' }}
-                  >
+                  <div className='text-base sm:text-2xl font-bold mb-2' style={statsValueStyle}>
                     {userState?.user?.request_count || 0}
                   </div>
                   <div className='flex items-center justify-center text-sm'>
-                    <BarChart2
-                      size={14}
-                      className='mr-1'
-                      style={{ color: 'rgba(255,255,255,0.8)' }}
-                    />
-                    <Text
-                      style={{
-                        color: 'rgba(255,255,255,0.8)',
-                        fontSize: '12px',
-                      }}
-                    >
+                    <BarChart2 size={14} className='mr-1' style={{ color: statsMetaColor }} />
+                    <Text style={{ color: statsMetaColor, fontSize: '12px' }}>
                       {t('请求次数')}
                     </Text>
                   </div>

@@ -152,17 +152,17 @@ const Home = () => {
   }, [endpointItems.length]);
 
   return (
-    <div className='w-full overflow-x-hidden'>
+    <div className='opencub-home-page w-full overflow-x-hidden'>
       <NoticeModal
         visible={noticeVisible}
         onClose={() => setNoticeVisible(false)}
         isMobile={isMobile}
       />
       {homePageContentLoaded && homePageContent === '' ? (
-        <div className='w-full overflow-x-hidden'>
+        <div className='flex h-full min-h-0 w-full overflow-hidden'>
           {/* Banner 部分 */}
           <div
-            className='relative min-h-[calc(100vh-72px)] w-full overflow-x-hidden'
+            className='relative flex min-h-[calc(100dvh-94px)] w-full overflow-x-hidden md:min-h-[calc(100dvh-94px)]'
             style={{
               background:
                 actualTheme === 'dark'
@@ -173,7 +173,7 @@ const Home = () => {
             {/* 背景模糊晕染球 */}
             <div className='blur-ball blur-ball-indigo' />
             <div className='blur-ball blur-ball-teal' />
-            <div className='flex min-h-[calc(100vh-72px)] items-center justify-center px-5 py-16 md:px-8 md:py-18 lg:px-12 lg:py-20 xl:px-16'>
+            <div className='flex w-full items-center justify-center px-5 py-4 md:px-8 md:py-6 lg:px-12 lg:py-8 xl:px-16'>
               {/* 居中内容区 */}
               <div className='mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:gap-14'>
                 <div className='mb-6 flex flex-col items-start justify-center text-left md:mb-8'>

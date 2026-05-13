@@ -46,6 +46,10 @@ const ModelDeploymentPage = () => {
         eyebrow='deployment'
         title='部署管理'
         description='统一查看模型部署、连通状态与接入配置，保持部署相关操作更聚焦。'
+        fitViewport
+        centerContent
+        className='model-deployment-page !pt-0 md:!pt-0 !pb-0 md:!pb-0'
+        contentClassName='model-deployment-page__content !p-0'
       >
         <DeploymentsTable />
       </ConsolePageShell>

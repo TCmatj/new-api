@@ -199,6 +199,7 @@ const Setting = () => {
       title='系统设置'
       description='将运营、模型、支付、聊天与系统配置聚合到统一的设置工作区，减少切页和信息噪音。'
       contentClassName='p-3 md:p-5'
+      compactTop
     >
       <Layout className='bg-transparent'>
         <Layout.Content>
