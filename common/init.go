@@ -22,9 +22,9 @@ var (
 )
 
 func printHelp() {
-	fmt.Println(SystemName + " " + Version + " - The next-generation LLM gateway and AI asset management system supports multiple languages.")
+	fmt.Println("NewAPI(Based OneAPI) " + Version + " - The next-generation LLM gateway and AI asset management system supports multiple languages.")
 	fmt.Println("Original Project: OneAPI by JustSong - https://github.com/songquanpeng/one-api")
-	fmt.Println("Maintainer: QuantumNous")
+	fmt.Println("Maintainer: QuantumNous - https://github.com/QuantumNous/new-api")
 	fmt.Println("Usage: newapi [--port <port>] [--log-dir <log directory>] [--version] [--help]")
 }
 
@@ -82,6 +82,7 @@ func InitEnv() {
 	DebugEnabled = os.Getenv("DEBUG") == "true"
 	MemoryCacheEnabled = os.Getenv("MEMORY_CACHE_ENABLED") == "true"
 	IsMasterNode = os.Getenv("NODE_TYPE") != "slave"
+	NodeName = os.Getenv("NODE_NAME")
 	TLSInsecureSkipVerify = GetEnvOrDefaultBool("TLS_INSECURE_SKIP_VERIFY", false)
 	if TLSInsecureSkipVerify {
 		if tr, ok := http.DefaultTransport.(*http.Transport); ok && tr != nil {

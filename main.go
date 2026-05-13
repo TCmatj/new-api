@@ -19,6 +19,7 @@ import (
 	"github.com/QuantumNous/new-api/middleware"
 	"github.com/QuantumNous/new-api/model"
 	"github.com/QuantumNous/new-api/oauth"
+	perfmetrics "github.com/QuantumNous/new-api/pkg/perf_metrics"
 	"github.com/QuantumNous/new-api/relay"
 	"github.com/QuantumNous/new-api/router"
 	"github.com/QuantumNous/new-api/service"
@@ -34,11 +35,19 @@ import (
 	_ "net/http/pprof"
 )
 
+// Compatibility with this fork: keep using the existing single-frontend build output.
+// We map both default/classic theme assets to the current web/dist layout.
 //go:embed web/dist
 var buildFS embed.FS
 
 //go:embed web/dist/index.html
 var indexPage []byte
+
+//go:embed web/dist
+var classicBuildFS embed.FS
+
+//go:embed web/dist/index.html
+var classicIndexPage []byte
 
 func main() {
 	startTime := time.Now()
@@ -49,7 +58,7 @@ func main() {
 		return
 	}
 
-	common.SysLog(common.SystemName + " " + common.Version + " started")
+	common.SysLog("New API " + common.Version + " started")
 	if os.Getenv("GIN_MODE") != "debug" {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -183,7 +192,12 @@ func main() {
 	InjectGoogleAnalytics()
 
 	// 设置路由
-	router.SetRouter(server, buildFS, indexPage)
+	router.SetRouter(server, router.ThemeAssets{
+		DefaultBuildFS:   buildFS,
+		DefaultIndexPage: indexPage,
+		ClassicBuildFS:   classicBuildFS,
+		ClassicIndexPage: classicIndexPage,
+	})
 	var port = os.Getenv("PORT")
 	if port == "" {
 		port = strconv.Itoa(*common.Port)
@@ -213,8 +227,10 @@ func InjectUmamiAnalytics() {
 		analyticsInjectBuilder.WriteString("\"></script>")
 	}
 	analyticsInjectBuilder.WriteString("<!--Umami QuantumNous-->\n")
-	analyticsInject := analyticsInjectBuilder.String()
-	indexPage = bytes.ReplaceAll(indexPage, []byte("<!--umami-->\n"), []byte(analyticsInject))
+	analyticsInject := []byte(analyticsInjectBuilder.String())
+	placeholder := []byte("<!--umami-->\n")
+	indexPage = bytes.ReplaceAll(indexPage, placeholder, analyticsInject)
+	classicIndexPage = bytes.ReplaceAll(classicIndexPage, placeholder, analyticsInject)
 }
 
 func InjectGoogleAnalytics() {
@@ -235,8 +251,10 @@ func InjectGoogleAnalytics() {
 		analyticsInjectBuilder.WriteString("</script>")
 	}
 	analyticsInjectBuilder.WriteString("<!--Google Analytics QuantumNous-->\n")
-	analyticsInject := analyticsInjectBuilder.String()
-	indexPage = bytes.ReplaceAll(indexPage, []byte("<!--Google Analytics-->\n"), []byte(analyticsInject))
+	analyticsInject := []byte(analyticsInjectBuilder.String())
+	placeholder := []byte("<!--Google Analytics-->\n")
+	indexPage = bytes.ReplaceAll(indexPage, placeholder, analyticsInject)
+	classicIndexPage = bytes.ReplaceAll(classicIndexPage, placeholder, analyticsInject)
 }
 
 func InitResources() error {
@@ -290,6 +308,8 @@ func InitResources() error {
 	if err != nil {
 		return err
 	}
+
+	perfmetrics.Init()
 
 	// 启动系统监控
 	common.StartSystemMonitor()
