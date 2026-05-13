@@ -7,7 +7,8 @@ set -euo pipefail
 # 3) restore this fork's compose/runtime layout
 # 4) re-apply this fork's single-frontend compatibility patches
 # 5) rebuild local/new-api:opencub
-# 6) recreate the new-api service and verify /api/status
+# 6) recreate the new-api service
+# 7) run post-deploy verification helper
 #
 # Usage:
 #   bin/update-backend-and-redeploy.sh
@@ -226,6 +227,11 @@ ensure_required_state() {
     err "缺少可执行脚本: bin/sync-backend-only.sh"
     exit 1
   fi
+
+  if [[ ! -x "$ROOT_DIR/bin/check-deploy.sh" ]]; then
+    err "缺少可执行脚本: bin/check-deploy.sh"
+    exit 1
+  fi
 }
 
 run_sync() {
@@ -264,25 +270,13 @@ redeploy() {
   docker compose up -d --build "$COMPOSE_SERVICE"
 }
 
-wait_for_health() {
-  local i body
-  log "等待健康检查: ${HEALTHCHECK_URL}"
-  for ((i=1; i<=HEALTHCHECK_RETRIES; i++)); do
-    if body="$(curl -fsS --max-time 8 "$HEALTHCHECK_URL")"; then
-      if grep -q '"success":true' <<<"$body"; then
-        log "健康检查通过（第 ${i} 次）"
-        echo "$body"
-        return 0
-      fi
-      warn "接口已响应，但 success != true（第 ${i} 次）"
-    else
-      warn "接口暂未就绪（第 ${i} 次）"
-    fi
-    sleep "$HEALTHCHECK_SLEEP"
-  done
-
-  err "健康检查超时：${HEALTHCHECK_URL}"
-  return 1
+run_post_deploy_checks() {
+  log "运行部署后检查脚本"
+  SERVICE_NAME="$COMPOSE_SERVICE" \
+  HEALTHCHECK_URL="$HEALTHCHECK_URL" \
+  HEALTHCHECK_RETRIES="$HEALTHCHECK_RETRIES" \
+  HEALTHCHECK_SLEEP="$HEALTHCHECK_SLEEP" \
+  "$ROOT_DIR/bin/check-deploy.sh"
 }
 
 main() {
@@ -303,7 +297,7 @@ main() {
   fi
 
   redeploy
-  wait_for_health
+  run_post_deploy_checks
 
   echo
   log "完成。建议后续检查："
