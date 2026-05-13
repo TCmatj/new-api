@@ -31,7 +31,6 @@ BACKEND_PATHS=(
   docker-compose.yml
   makefile
   VERSION
-  bin
 )
 
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
