@@ -22,8 +22,10 @@ type ThemeAssets struct {
 }
 
 func SetWebRouter(router *gin.Engine, assets ThemeAssets) {
-	defaultFS := common.EmbedFolder(assets.DefaultBuildFS, "web/default/dist")
-	classicFS := common.EmbedFolder(assets.ClassicBuildFS, "web/classic/dist")
+	// Compatibility with this fork: both embedded theme assets currently point to
+	// the single frontend build output at web/dist.
+	defaultFS := common.EmbedFolder(assets.DefaultBuildFS, "web/dist")
+	classicFS := common.EmbedFolder(assets.ClassicBuildFS, "web/dist")
 	themeFS := common.NewThemeAwareFS(defaultFS, classicFS)
 
 	router.Use(gzip.Gzip(gzip.DefaultCompression))

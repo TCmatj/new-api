@@ -206,6 +206,33 @@ path.write_text(text)
 PY
 }
 
+patch_web_router_go() {
+  python3 - <<'PY'
+from pathlib import Path
+path = Path('router/web-router.go')
+text = path.read_text()
+old = """func SetWebRouter(router *gin.Engine, assets ThemeAssets) {
+	defaultFS := common.EmbedFolder(assets.DefaultBuildFS, \"web/default/dist\")
+	classicFS := common.EmbedFolder(assets.ClassicBuildFS, \"web/classic/dist\")
+	themeFS := common.NewThemeAwareFS(defaultFS, classicFS)
+"""
+new = """func SetWebRouter(router *gin.Engine, assets ThemeAssets) {
+	// Compatibility with this fork: both embedded theme assets currently point to
+	// the single frontend build output at web/dist.
+	defaultFS := common.EmbedFolder(assets.DefaultBuildFS, \"web/dist\")
+	classicFS := common.EmbedFolder(assets.ClassicBuildFS, \"web/dist\")
+	themeFS := common.NewThemeAwareFS(defaultFS, classicFS)
+"""
+if old in text:
+    text = text.replace(old, new, 1)
+elif new in text:
+    pass
+else:
+    raise SystemExit('router/web-router.go static asset block not found; please check upstream changes manually')
+path.write_text(text)
+PY
+}
+
 ensure_required_state() {
   need_cmd git
   need_cmd docker
@@ -254,6 +281,9 @@ apply_fork_compat_patches() {
 
   log "修补 main.go 的 embed 路径，继续兼容单前端 web/dist"
   patch_main_go
+
+  log "修补 router/web-router.go 的静态资源挂载路径"
+  patch_web_router_go
 }
 
 show_diff_summary() {
