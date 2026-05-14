@@ -54,11 +54,7 @@ const AuthShell = ({
               {subtitle}
             </Text>
             <div className='mt-8 grid grid-cols-1 gap-4'>
-              {[
-                '统一品牌与入口',
-                '更克制的视觉层次',
-                '更聚焦的登录与注册体验',
-              ].map((item) => (
+              {['统一的大模型接入工具'].map((item) => (
                 <div
                   key={item}
                   className='rounded-2xl border border-slate-200/70 bg-white/70 px-4 py-4 text-sm text-slate-700 shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-slate-200'

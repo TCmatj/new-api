@@ -65,10 +65,6 @@ const BASE_URL_SUGGESTIONS = [
     label: 'https://newapi.matc2025.click',
     value: 'https://newapi.matc2025.click',
   },
-  {
-    label: 'http://img.matc2025.click:3000',
-    value: 'http://img.matc2025.click:3000',
-  },
 ].filter((item) => item.value);
 
 function defaultBaseUrl() {
