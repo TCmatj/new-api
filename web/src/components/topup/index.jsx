@@ -163,6 +163,10 @@ const TopUp = () => {
         return;
       }
     } else {
+      if (topUpLink) {
+        openTopUpLink();
+        return;
+      }
       if (!enableOnlineTopUp) {
         showError(t('管理员未开启在线充值！'));
         return;
@@ -478,6 +482,7 @@ const TopUp = () => {
           // 这个逻辑现在由后端处理，如果 Stripe 启用，后端会在 pay_methods 中包含它
 
           setPayMethods(payMethods);
+          setTopUpLink(data.topup_link || statusState?.status?.top_up_link || '');
           const enableStripeTopUp = data.enable_stripe_topup || false;
           const enableOnlineTopUp = data.enable_online_topup || false;
           const enableCreemTopUp = data.enable_creem_topup || false;
@@ -603,7 +608,7 @@ const TopUp = () => {
       // const minTopUpValue = statusState.status.min_topup || 1;
       // setMinTopUp(minTopUpValue);
       // setTopUpCount(minTopUpValue);
-      setTopUpLink(statusState.status.top_up_link || '');
+      setTopUpLink(statusState.status.top_up_link || topUpLink || '');
       setPriceRatio(statusState.status.price || 1);
 
       setStatusLoading(false);

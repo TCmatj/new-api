@@ -144,12 +144,13 @@ const RechargeCard = ({
     }
   }, [shouldShowSubscription, activeTab]);
   const hasExternalTopUpLink = !!topUpLink;
-  const showOnlineTopUpForm =
-    hasExternalTopUpLink ||
+  const hasNativeRechargeMethods =
     enableOnlineTopUp ||
     enableStripeTopUp ||
     enableCreemTopUp ||
     enableWaffoTopUp;
+  const showExternalLinkOnly = hasExternalTopUpLink;
+  const showOnlineTopUpForm = hasNativeRechargeMethods && !showExternalLinkOnly;
   const topupContent = (
     <Space vertical style={{ width: '100%' }}>
       {/* 统计数据 */}
@@ -573,6 +574,24 @@ const RechargeCard = ({
               )}
             </div>
           </Form>
+        ) : hasExternalTopUpLink ? (
+          <Space vertical align='start' className='w-full'>
+            <Banner
+              type='info'
+              description={t('当前使用外部充值链接，请点击下方按钮前往充值。')}
+              className='!rounded-xl w-full'
+              closeIcon={null}
+            />
+            <Button
+              theme='solid'
+              type='primary'
+              onClick={openTopUpLink}
+              icon={<CreditCard size={16} />}
+              className='!rounded-lg !px-4 !py-2'
+            >
+              {t('前往充值')}
+            </Button>
+          </Space>
         ) : (
           <Banner
             type='info'
