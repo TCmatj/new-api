@@ -53,19 +53,6 @@ const SIZE_OPTIONS = [
 const QUALITY_OPTIONS = ['auto', 'low', 'medium', 'high'];
 const BACKGROUND_OPTIONS = ['auto', 'opaque', 'transparent'];
 const COUNT_OPTIONS = [1, 2, 3, 4];
-const BASE_URL_SUGGESTIONS = [
-  {
-    label: '当前站点',
-    value:
-      typeof window !== 'undefined' && window.location?.origin
-        ? window.location.origin
-        : '',
-  },
-  {
-    label: 'https://newapi.matc2025.click',
-    value: 'https://newapi.matc2025.click',
-  },
-].filter((item) => item.value);
 
 function defaultBaseUrl() {
   if (typeof window !== 'undefined' && window.location?.origin) {
@@ -334,23 +321,6 @@ function ImageGallery({ items, format, prefix, onPreview }) {
           </div>
         );
       })}
-    </div>
-  );
-}
-
-function UrlSuggestions({ onSelect }) {
-  return (
-    <div className='image-workbench-url-list'>
-      {BASE_URL_SUGGESTIONS.map((item) => (
-        <Button
-          key={item.value}
-          size='small'
-          theme='outline'
-          onClick={() => onSelect(item.value)}
-        >
-          {item.label}
-        </Button>
-      ))}
     </div>
   );
 }
@@ -806,7 +776,9 @@ const ImageWorkbench = () => {
                   onChange={(e) => setBaseUrl(e.target.value)}
                   placeholder='https://newapi.matc2025.click'
                 />
-                <UrlSuggestions onSelect={setBaseUrl} />
+                <span className='image-workbench-hint'>
+                  默认已填充当前站点地址；如需调别的兼容接口，也可以手动改这里。
+                </span>
               </label>
 
               <label className='image-workbench-field'>
@@ -820,7 +792,7 @@ const ImageWorkbench = () => {
                   placeholder='输入 Bearer Token'
                 />
                 <span className='image-workbench-hint'>
-                  仅保存在当前浏览器 localStorage，同源脚本可读取，请在可信环境使用。
+                  Token 仅保存在当前浏览器 localStorage，同源脚本可读取，请在可信环境使用。
                 </span>
               </label>
             </div>
