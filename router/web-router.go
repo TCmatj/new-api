@@ -35,6 +35,11 @@ func SetWebRouter(router *gin.Engine, assets ThemeAssets) {
 	router.NoRoute(func(c *gin.Context) {
 		c.Set(middleware.RouteTagKey, "web")
 		if strings.HasPrefix(c.Request.RequestURI, "/v1") || strings.HasPrefix(c.Request.RequestURI, "/api") || strings.HasPrefix(c.Request.RequestURI, "/assets") {
+			if strings.HasPrefix(c.Request.RequestURI, "/assets") {
+				c.Header("Cache-Control", "no-store, no-cache, must-revalidate, private, max-age=0")
+				c.Header("Pragma", "no-cache")
+				c.Header("Expires", "0")
+			}
 			controller.RelayNotFound(c)
 			return
 		}
