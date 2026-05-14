@@ -143,6 +143,13 @@ const RechargeCard = ({
       setActiveTab('topup');
     }
   }, [shouldShowSubscription, activeTab]);
+  const hasExternalTopUpLink = !!topUpLink;
+  const showOnlineTopUpForm =
+    hasExternalTopUpLink ||
+    enableOnlineTopUp ||
+    enableStripeTopUp ||
+    enableCreemTopUp ||
+    enableWaffoTopUp;
   const topupContent = (
     <Space vertical style={{ width: '100%' }}>
       {/* 统计数据 */}
@@ -224,19 +231,19 @@ const RechargeCard = ({
           <div className='py-8 flex justify-center'>
             <Spin size='large' />
           </div>
-        ) : enableOnlineTopUp || enableStripeTopUp || enableCreemTopUp || enableWaffoTopUp ? (
+        ) : showOnlineTopUpForm ? (
           <Form
             getFormApi={(api) => (onlineFormApiRef.current = api)}
             initValues={{ topUpCount: topUpCount }}
           >
             <div className='space-y-6'>
-              {(enableOnlineTopUp || enableStripeTopUp || enableWaffoTopUp) && (
+              {(enableOnlineTopUp || enableStripeTopUp || enableWaffoTopUp || hasExternalTopUpLink) && (
                 <Row gutter={12}>
                   <Col xs={24} sm={24} md={24} lg={10} xl={10}>
                     <Form.InputNumber
                       field='topUpCount'
                       label={t('充值数量')}
-                      disabled={!enableOnlineTopUp && !enableStripeTopUp && !enableWaffoTopUp}
+                      disabled={!enableOnlineTopUp && !enableStripeTopUp && !enableWaffoTopUp && !hasExternalTopUpLink}
                       placeholder={
                         t('充值数量，最低 ') + renderQuotaWithAmount(minTopUp)
                       }
@@ -295,9 +302,10 @@ const RechargeCard = ({
                           {payMethods.filter(m => m.type !== 'waffo').map((payMethod) => {
                             const minTopupVal = Number(payMethod.min_topup) || 0;
                             const isStripe = payMethod.type === 'stripe';
+                            const useExternalLink = hasExternalTopUpLink && !isStripe;
                             const disabled =
-                              (!enableOnlineTopUp && !isStripe) ||
-                              (!enableStripeTopUp && isStripe) ||
+                              (useExternalLink ? false : ((!enableOnlineTopUp && !isStripe) ||
+                              (!enableStripeTopUp && isStripe))) ||
                               minTopupVal > Number(topUpCount || 0);
 
                             const buttonEl = (
@@ -305,7 +313,11 @@ const RechargeCard = ({
                                 key={payMethod.type}
                                 theme='outline'
                                 type='tertiary'
-                                onClick={() => preTopUp(payMethod.type)}
+                                onClick={() =>
+                                  useExternalLink
+                                    ? openTopUpLink()
+                                    : preTopUp(payMethod.type)
+                                }
                                 disabled={disabled}
                                 loading={
                                   paymentLoading && payWay === payMethod.type
@@ -358,7 +370,7 @@ const RechargeCard = ({
                 </Row>
               )}
 
-              {(enableOnlineTopUp || enableStripeTopUp || enableWaffoTopUp) && (
+              {(enableOnlineTopUp || enableStripeTopUp || enableWaffoTopUp || hasExternalTopUpLink) && (
                 <Form.Slot
                   label={
                     <div className='flex items-center gap-2'>
@@ -476,6 +488,20 @@ const RechargeCard = ({
                       );
                     })}
                   </div>
+                </Form.Slot>
+              )}
+
+              {hasExternalTopUpLink && !enableOnlineTopUp && !enableStripeTopUp && !enableWaffoTopUp && !enableCreemTopUp && (
+                <Form.Slot label={t('充值方式')}>
+                  <Button
+                    theme='solid'
+                    type='primary'
+                    onClick={openTopUpLink}
+                    icon={<CreditCard size={16} />}
+                    className='!rounded-lg !px-4 !py-2'
+                  >
+                    {t('前往充值')}
+                  </Button>
                 </Form.Slot>
               )}
 
