@@ -1,0 +1,11 @@
+services:
+  new-api-frontend-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend-test
+    container_name: new-api-frontend-test
+    restart: unless-stopped
+    ports:
+      - "3002:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

@@ -68,6 +68,7 @@ const NotificationSettings = ({
       enabled: true,
       playground: true,
       imageWorkbench: true,
+      onlineImageStudio: true,
       chat: true,
     },
     console: {
@@ -157,7 +158,7 @@ const NotificationSettings = ({
 
   const resetSidebarModules = () => {
     const defaultConfig = {
-      chat: { enabled: true, playground: true, imageWorkbench: true, chat: true },
+      chat: { enabled: true, playground: true, imageWorkbench: true, onlineImageStudio: true, chat: true },
       console: {
         enabled: true,
         detail: true,

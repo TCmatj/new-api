@@ -44,6 +44,7 @@ export default function SettingsSidebarModulesAdmin(props) {
       enabled: true,
       playground: true,
       imageWorkbench: true,
+      onlineImageStudio: true,
       chat: true,
     },
     console: {
@@ -106,6 +107,7 @@ export default function SettingsSidebarModulesAdmin(props) {
         enabled: true,
         playground: true,
         imageWorkbench: true,
+        onlineImageStudio: true,
         chat: true,
       },
       console: {
@@ -220,8 +222,13 @@ export default function SettingsSidebarModulesAdmin(props) {
         },
         {
           key: 'imageWorkbench',
-          title: t('绘图工作台'),
-          description: t('图片生成与编辑工作台'),
+          title: t('静态绘图台'),
+          description: t('当前直接调用接口的绘图工作台'),
+        },
+        {
+          key: 'onlineImageStudio',
+          title: t('在线绘图台'),
+          description: t('通过本地代理任务化调用 Image2 绘图接口'),
         },
         { key: 'chat', title: t('聊天'), description: t('聊天会话管理') },
       ],

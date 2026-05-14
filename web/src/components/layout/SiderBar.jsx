@@ -50,6 +50,7 @@ const routerMap = {
   deployment: '/console/deployment',
   playground: '/console/playground',
   imageWorkbench: '/console/image-workbench',
+  onlineImageStudio: '/console/online-image-studio',
   personal: '/console/personal',
 };
 
@@ -211,9 +212,14 @@ const SiderBar = ({ onNavigate = () => {} }) => {
         to: '/playground',
       },
       {
-        text: t('绘图工作台'),
+        text: t('静态绘图台'),
         itemKey: 'imageWorkbench',
         to: '/image-workbench',
+      },
+      {
+        text: t('在线绘图台'),
+        itemKey: 'onlineImageStudio',
+        to: '/online-image-studio',
       },
     ];
 
@@ -444,7 +450,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
           {hasSectionVisibleModules('chat') && (
             <div className='sidebar-section'>
               {!collapsed && (
-                <div className='sidebar-group-label px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500'>{t('聊天')}</div>
+                <div className='sidebar-group-label px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500'>{t('聊天与绘图')}</div>
               )}
               {chatMenuItems.map((item) => renderSubItem(item))}
             </div>
