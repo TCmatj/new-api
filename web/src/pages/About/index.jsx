@@ -17,14 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { API, showError } from '../../helpers';
 import { applyDocumentTitle } from '../../helpers/documentTitle';
 import { marked } from 'marked';
-import { Empty, Typography } from '@douyinfe/semi-ui';
-import { FileText } from 'lucide-react';
+import { Typography } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
-import EmptyStateIcon from '../../components/common/EmptyStateIcon';
 
 const { Text } = Typography;
 
@@ -33,14 +31,25 @@ const About = () => {
   const [about, setAbout] = useState('');
   const [aboutLoaded, setAboutLoaded] = useState(false);
 
+  const normalizedAbout = useMemo(() => {
+    if (typeof about === 'string') {
+      return about;
+    }
+    if (about === null || about === undefined) {
+      return '';
+    }
+    return String(about);
+  }, [about]);
+
   const displayAbout = async () => {
     setAbout(localStorage.getItem('about') || '');
     const res = await API.get('/api/about');
     const { success, message, data } = res.data;
     if (success) {
-      let aboutContent = data;
-      if (!data.startsWith('https://')) {
-        aboutContent = marked.parse(data);
+      const rawAbout = typeof data === 'string' ? data : data == null ? '' : String(data);
+      let aboutContent = rawAbout;
+      if (rawAbout !== '' && !rawAbout.startsWith('https://')) {
+        aboutContent = marked.parse(rawAbout);
       }
       setAbout(aboutContent);
       localStorage.setItem('about', aboutContent);
@@ -56,35 +65,19 @@ const About = () => {
     displayAbout().then();
   }, [t]);
 
-  const emptyStyle = {
-    padding: '24px',
-  };
-
-  const customDescription = (
-    <div className='mx-auto max-w-3xl rounded-[32px] border border-white/60 bg-white/78 p-8 text-left shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/72'>
-      <Text className='!text-base !leading-7 !text-slate-500 dark:!text-slate-300'>
-        {t('管理员暂时未设置任何关于内容')}
-      </Text>
-    </div>
-  );
-
   return (
     <div className='mt-[72px] px-3 py-6 md:px-6 md:py-10'>
-      {aboutLoaded && about === '' ? (
-        <div className='flex min-h-[calc(100vh-160px)] items-center justify-center p-4 md:p-8'>
-          <Empty
-            image={<EmptyStateIcon icon={FileText} accent='slate' />}
-            description={t('管理员暂时未设置任何关于内容')}
-            style={emptyStyle}
-          >
-            {customDescription}
-          </Empty>
+      {aboutLoaded && normalizedAbout === '' ? (
+        <div className='mx-auto max-w-3xl rounded-[32px] border border-white/60 bg-white/78 p-8 text-left shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/72'>
+          <Text className='!text-base !leading-7 !text-slate-500 dark:!text-slate-300'>
+            {t('管理员暂时未设置任何关于内容')}
+          </Text>
         </div>
       ) : (
         <>
-          {about.startsWith('https://') ? (
+          {normalizedAbout.startsWith('https://') ? (
             <iframe
-              src={about}
+              src={normalizedAbout}
               style={{ width: '100%', height: '100vh', border: 'none' }}
               className='overflow-hidden rounded-[28px] border border-white/60 bg-white/70 shadow-[0_24px_80px_rgba(15,23,42,0.08)] dark:border-white/10 dark:bg-zinc-950/72'
             />
@@ -92,7 +85,7 @@ const About = () => {
             <div
               className='mx-auto max-w-5xl rounded-[32px] border border-white/60 bg-white/78 px-6 py-8 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/72 md:px-10'
               style={{ fontSize: 'larger' }}
-              dangerouslySetInnerHTML={{ __html: about }}
+              dangerouslySetInnerHTML={{ __html: normalizedAbout }}
             ></div>
           )}
         </>
