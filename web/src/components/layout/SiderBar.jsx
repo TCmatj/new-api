@@ -21,7 +21,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getLucideIcon } from '../../helpers/render';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, ExternalLink } from 'lucide-react';
 import { useSidebarCollapsed } from '../../hooks/common/useSidebarCollapsed';
 import { useSidebar } from '../../hooks/common/useSidebar';
 import { useMinimumLoadingTime } from '../../hooks/common/useMinimumLoadingTime';
@@ -50,9 +50,10 @@ const routerMap = {
   deployment: '/console/deployment',
   playground: '/console/playground',
   imageWorkbench: '/console/image-workbench',
-  onlineImageStudio: '/console/online-image-studio',
   personal: '/console/personal',
 };
+
+const IMAGE_STUDIO_EXTERNAL_URL = 'https://opencub.uk/gpt-image-playground/';
 
 const SiderBar = ({ onNavigate = () => {} }) => {
   const { t } = useTranslation();
@@ -217,9 +218,10 @@ const SiderBar = ({ onNavigate = () => {} }) => {
         to: '/image-workbench',
       },
       {
-        text: t('在线绘图台'),
-        itemKey: 'onlineImageStudio',
-        to: '/online-image-studio',
+        text: t('绘图工作台'),
+        itemKey: 'imageStudioExternal',
+        external: true,
+        href: IMAGE_STUDIO_EXTERNAL_URL,
       },
     ];
 
@@ -335,7 +337,11 @@ const SiderBar = ({ onNavigate = () => {} }) => {
         }
         icon={
           <div className='sidebar-icon-container flex-shrink-0'>
-            {getLucideIcon(item.itemKey, isSelected)}
+            {item.external ? (
+              <ExternalLink size={18} strokeWidth={2} />
+            ) : (
+              getLucideIcon(item.itemKey, isSelected)
+            )}
           </div>
         }
         className={item.className}
@@ -370,8 +376,7 @@ const SiderBar = ({ onNavigate = () => {} }) => {
           {item.items.map((subItem) => {
             const isSubSelected = selectedKeys.includes(subItem.itemKey);
             const subTextColor = isSubSelected ? SELECTED_COLOR : 'inherit';
-
-            return (
+            const subItemElement = (
               <Nav.Item
                 key={subItem.itemKey}
                 itemKey={subItem.itemKey}
@@ -383,8 +388,32 @@ const SiderBar = ({ onNavigate = () => {} }) => {
                     {subItem.text}
                   </span>
                 }
+                icon={
+                  subItem.external ? (
+                    <div className='sidebar-icon-container flex-shrink-0'>
+                      <ExternalLink size={16} strokeWidth={2} />
+                    </div>
+                  ) : undefined
+                }
               />
             );
+
+            if (subItem.external) {
+              return (
+                <a
+                  key={subItem.itemKey}
+                  href={subItem.href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  style={{ textDecoration: 'none' }}
+                  onClick={onNavigate}
+                >
+                  {subItemElement}
+                </a>
+              );
+            }
+
+            return subItemElement;
           })}
         </Nav.Sub>
       );
@@ -419,6 +448,20 @@ const SiderBar = ({ onNavigate = () => {} }) => {
           renderWrapper={({ itemElement, props }) => {
             const to =
               routerMapState[props.itemKey] || routerMap[props.itemKey];
+
+            if (props.itemKey === 'imageStudioExternal') {
+              return (
+                <a
+                  style={{ textDecoration: 'none' }}
+                  href={IMAGE_STUDIO_EXTERNAL_URL}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  onClick={onNavigate}
+                >
+                  {itemElement}
+                </a>
+              );
+            }
 
             // 如果没有路由，直接返回元素
             if (!to) return itemElement;

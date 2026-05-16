@@ -122,8 +122,6 @@ export function getLucideIcon(key, selected = false) {
       return <TerminalSquare {...commonProps} color={iconColor} />;
     case 'imageWorkbench':
       return <ImageIcon {...commonProps} color={iconColor} />;
-    case 'onlineImageStudio':
-      return <ImageIcon {...commonProps} color={iconColor} />;
     case 'chat':
       return <MessageSquare {...commonProps} color={iconColor} />;
     case 'token':

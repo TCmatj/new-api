@@ -757,7 +757,7 @@ const ImageWorkbench = () => {
         <Space vertical align='start' spacing='medium' style={{ width: '100%' }}>
           <div>
             <Title heading={3} style={{ marginBottom: 8 }}>
-              {t('绘图工作台')}
+              {t('静态绘图台')}
             </Title>
             <Text type='tertiary'>
               {t(
@@ -765,6 +765,28 @@ const ImageWorkbench = () => {
               )}
             </Text>
           </div>
+
+          <Card
+            bordered={true}
+            bodyStyle={{ padding: 16 }}
+            style={{ width: '100%', background: 'var(--semi-color-fill-0)' }}
+          >
+            <Space vertical align='start' spacing='small' style={{ width: '100%' }}>
+              <Text strong>{t('建议优先使用绘图工作台')}</Text>
+              <Text type='secondary'>
+                {t('静态绘图台直接等待接口返回，遇到大图、复杂提示词或慢上游时更容易超时。建议优先使用绘图工作台。')}
+              </Text>
+              <Button
+                type='primary'
+                theme='solid'
+                onClick={() => {
+                  window.open('https://opencub.uk/gpt-image-playground/', '_blank', 'noopener,noreferrer');
+                }}
+              >
+                {t('打开绘图工作台')}
+              </Button>
+            </Space>
+          </Card>
 
           <div className='image-workbench-config-box' style={{ width: '100%' }}>
             <div className='image-workbench-form-grid'>

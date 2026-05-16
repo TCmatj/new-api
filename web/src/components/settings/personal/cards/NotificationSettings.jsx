@@ -68,7 +68,6 @@ const NotificationSettings = ({
       enabled: true,
       playground: true,
       imageWorkbench: true,
-      onlineImageStudio: true,
       chat: true,
     },
     console: {
@@ -158,7 +157,7 @@ const NotificationSettings = ({
 
   const resetSidebarModules = () => {
     const defaultConfig = {
-      chat: { enabled: true, playground: true, imageWorkbench: true, onlineImageStudio: true, chat: true },
+      chat: { enabled: true, playground: true, imageWorkbench: true, chat: true },
       console: {
         enabled: true,
         detail: true,
@@ -209,7 +208,7 @@ const NotificationSettings = ({
           } else {
             userConf = userRes.data.data.sidebar_modules;
           }
-          setSidebarModulesUser(userConf);
+          setSidebarModulesUser(mergeAdminConfig(userConf));
         }
       } catch (error) {
         console.error('加载边栏配置失败:', error);
@@ -258,8 +257,8 @@ const NotificationSettings = ({
         },
         {
           key: 'imageWorkbench',
-          title: t('绘图工作台'),
-          description: t('图片生成与编辑工作台'),
+          title: t('静态绘图台'),
+          description: t('当前直接调用接口的绘图工作台'),
         },
         { key: 'chat', title: t('聊天'), description: t('聊天会话管理') },
       ],

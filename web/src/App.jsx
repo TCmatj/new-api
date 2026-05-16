@@ -45,7 +45,6 @@ import ModelPage from './pages/Model';
 import ModelDeploymentPage from './pages/ModelDeployment';
 import Playground from './pages/Playground';
 import ImageWorkbench from './pages/ImageWorkbench';
-import OnlineImageStudio from './pages/OnlineImageStudio';
 import Subscription from './pages/Subscription';
 import OAuth2Callback from './components/auth/OAuth2Callback';
 import PersonalSetting from './components/settings/PersonalSetting';
@@ -162,14 +161,6 @@ function App() {
           element={
             <PrivateRoute>
               <ImageWorkbench />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path='/console/online-image-studio'
-          element={
-            <PrivateRoute>
-              <OnlineImageStudio />
             </PrivateRoute>
           }
         />
