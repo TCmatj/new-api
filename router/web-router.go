@@ -32,8 +32,22 @@ func SetWebRouter(router *gin.Engine, assets ThemeAssets) {
 	router.Use(middleware.GlobalWebRateLimit())
 	router.Use(middleware.Cache())
 	router.Use(static.Serve("/", themeFS))
+
+	docsRedirectPaths := map[string]struct{}{
+		"/docs":  {},
+		"/docs/": {},
+		"/guide": {},
+		"/guide/": {},
+		"/help":  {},
+		"/help/": {},
+	}
+
 	router.NoRoute(func(c *gin.Context) {
 		c.Set(middleware.RouteTagKey, "web")
+		if _, ok := docsRedirectPaths[c.Request.URL.Path]; ok {
+			c.Redirect(http.StatusFound, "/doc.html")
+			return
+		}
 		if strings.HasPrefix(c.Request.RequestURI, "/v1") || strings.HasPrefix(c.Request.RequestURI, "/api") || strings.HasPrefix(c.Request.RequestURI, "/assets") {
 			if strings.HasPrefix(c.Request.RequestURI, "/assets") {
 				c.Header("Cache-Control", "no-store, no-cache, must-revalidate, private, max-age=0")
