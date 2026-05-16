@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenCub API 服务站点使用教程</title>
+  <meta name="description" content="OpenCub API 服务站点常规使用文档：注册、充值、创建 API Key、配置 Codex / Claude Code / Cherry Studio / Open WebUI / 绘图工作台，以及倍率和常见问题说明。" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --ink: #14213d;
+      --muted: #667085;
+      --line: #e6eaf2;
+      --primary: #1e3a8a;
+      --primary-2: #3158c9;
+      --accent: #f59e0b;
+      --good: #16833a;
+      --warn: #b45309;
+      --bad: #dc2626;
+      --soft: #eef4ff;
+      --soft-2: #fff7e6;
+      --shadow: 0 16px 45px rgba(20, 33, 61, .08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      line-height: 1.75;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 5%, rgba(245, 158, 11, .14), transparent 26%),
+        radial-gradient(circle at 85% 8%, rgba(49, 88, 201, .12), transparent 28%),
+        linear-gradient(180deg, #fff 0%, var(--bg) 36%, #f8fafc 100%);
+    }
+
+    a { color: var(--primary-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(255, 255, 255, .78);
+      border-bottom: 1px solid rgba(230, 234, 242, .85);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 66px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--primary);
+      background: linear-gradient(145deg, #fff, #edf4ff);
+      border: 1px solid #e5edff;
+      box-shadow: 0 8px 20px rgba(30, 58, 138, .12);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      color: #344054;
+      font-size: 14px;
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+
+    .nav a:hover {
+      background: var(--soft);
+      text-decoration: none;
+      color: var(--primary);
+    }
+
+    header.hero { padding: 56px 0 34px; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(20, 33, 61, .06);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .badge span {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 9px;
+      background: #fff7e6;
+      color: #9a5a00;
+      font-weight: 900;
+    }
+
+    h1 {
+      margin: 20px 0 12px;
+      line-height: 1.08;
+      font-size: clamp(36px, 6vw, 66px);
+      letter-spacing: -2px;
+      color: #0f1f3f;
+    }
+
+    .subtitle {
+      margin: 0 0 22px;
+      color: #344054;
+      font-size: clamp(17px, 2.3vw, 23px);
+      font-weight: 650;
+    }
+
+    .desc {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 12px 16px;
+      min-height: 46px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); text-decoration: none; }
+
+    .btn.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 12px 26px rgba(30, 58, 138, .22);
+    }
+
+    .btn.ghost {
+      color: var(--primary);
+      background: #fff;
+      border-color: #dbe6ff;
+    }
+
+    .hero-card {
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card:before {
+      content: "";
+      position: absolute;
+      right: -70px;
+      top: -70px;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, .16);
+    }
+
+    .mini-title { color: var(--muted); font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+      position: relative;
+    }
+
+    .feature {
+      background: #fff;
+      border: 1px solid #edf1f7;
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .feature .icon { font-size: 24px; }
+    .feature b { display: block; margin-top: 5px; }
+    .feature p { margin: 2px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+    .notice {
+      margin: 22px 0 0;
+      padding: 18px 20px;
+      border-radius: 20px;
+      border: 1px solid #f7d58a;
+      background: linear-gradient(180deg, #fffaf0, #fff7e6);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .notice .bulb {
+      flex: 0 0 auto;
+      width: 50px;
+      height: 50px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: #ffb547;
+      color: #fff;
+      font-size: 25px;
+    }
+
+    .notice h2 {
+      margin: 0 0 4px;
+      color: #92400e;
+      font-size: 22px;
+    }
+
+    .notice p { margin: 0; color: #5f3b10; }
+
+    main { padding: 6px 0 58px; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 26px;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 86px;
+      background: rgba(255,255,255,.86);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 10px 26px rgba(20,33,61,.05);
+    }
+
+    .toc-title { font-weight: 900; margin-bottom: 8px; }
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 10px;
+      color: #475467;
+      font-size: 14px;
+    }
+    .toc a:hover { background: var(--soft); color: var(--primary); text-decoration: none; }
+
+    section.card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 12px 32px rgba(20, 33, 61, .055);
+      padding: 28px;
+      margin: 0 0 20px;
+    }
+
+    section.card h2 {
+      margin: 0 0 14px;
+      font-size: 28px;
+      line-height: 1.28;
+      letter-spacing: -.4px;
+    }
+
+    section.card h3 {
+      margin: 24px 0 10px;
+      font-size: 20px;
+    }
+
+    .lead { color: var(--muted); margin-top: -4px; }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 14px;
+      margin: 18px 0 0;
+    }
+
+    .step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid #edf1f7;
+      background: #fbfcff;
+    }
+
+    .step:before {
+      content: counter(step);
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    }
+
+    .step h4 { margin: 0 0 4px; font-size: 17px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+
+    .info-box {
+      border: 1px solid #e7ecf5;
+      border-radius: 18px;
+      padding: 16px;
+      background: #fbfcff;
+    }
+
+    .info-box h4 { margin: 0 0 8px; font-size: 16px; }
+    .info-box p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .config-table, .model-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      margin-top: 14px;
+    }
+
+    .config-table th, .config-table td, .model-table th, .model-table td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .config-table th, .model-table th {
+      color: #243b70;
+      background: #f0f5ff;
+      font-weight: 900;
+    }
+
+    .config-table tr:last-child td, .model-table tr:last-child td { border-bottom: 0; }
+
+    code, .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 7px;
+      font-size: .95em;
+    }
+
+    .copy-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 12px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid #e7ecf5;
+      margin: 10px 0;
+    }
+
+    .copy-line .value { flex: 1 1 260px; word-break: break-all; }
+
+    .copy-btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 70px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      border: 1px solid transparent;
+    }
+    .tag.green { color: var(--good); background: #e9f9ee; border-color: #bce9c8; }
+    .tag.yellow { color: var(--warn); background: #fff6da; border-color: #f5dda2; }
+    .tag.red { color: var(--bad); background: #fff0f0; border-color: #ffd1d1; }
+    .tag.orange { color: #ea580c; background: #fff1e7; border-color: #fed7aa; }
+
+    .callout {
+      margin: 18px 0;
+      border-radius: 18px;
+      padding: 16px 18px;
+      border: 1px solid #cfe0ff;
+      background: #f4f8ff;
+      color: #243b70;
+    }
+
+    .callout.warn {
+      border-color: #f5dda2;
+      background: #fffaf0;
+      color: #744210;
+    }
+
+    details {
+      border: 1px solid #e7ecf5;
+      border-radius: 16px;
+      background: #fff;
+      padding: 0;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 850;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    details[open] summary { border-bottom: 1px solid #e7ecf5; background: #fbfcff; }
+    details .details-body { padding: 14px 16px; color: var(--muted); }
+    details .details-body p:first-child { margin-top: 0; }
+    details .details-body p:last-child { margin-bottom: 0; }
+
+    .footer {
+      padding: 26px 0 42px;
+      color: var(--muted);
+      text-align: center;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.5);
+    }
+
+    .placeholder {
+      color: #9a3412;
+      font-weight: 900;
+      background: #fff7ed;
+      border: 1px dashed #fdba74;
+      border-radius: 8px;
+      padding: 1px 6px;
+    }
+
+    ul, ol { padding-left: 1.25em; }
+    li + li { margin-top: 4px; }
+
+    @media (max-width: 920px) {
+      .hero-grid, .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .nav { display: none; }
+      .grid-2, .grid-3, .feature-grid { grid-template-columns: 1fr; }
+      section.card { padding: 22px; }
+    }
+
+    @media print {
+      .topbar, .toc, .hero-actions, .copy-btn { display: none !important; }
+      body { background: #fff; }
+      section.card, .hero-card { box-shadow: none; break-inside: avoid; }
+      .layout, .hero-grid { grid-template-columns: 1fr; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand"><div class="logo">OC</div><span>OpenCub API 文档</span></div>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#intro">站点介绍</a>
+        <a href="#prepare">使用前准备</a>
+        <a href="#clients">客户端配置</a>
+        <a href="#drawing-workbench">绘图工作台</a>
+        <a href="#models">模型倍率</a>
+        <a href="#faq">常见问题</a>
+        <a href="#support">售后福利</a>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <div class="badge"><span>oc</span> OpenCub Workspace</div>
+        <h1>OpenCub API<br />服务站点使用教程</h1>
+        <p class="subtitle">多模型接入 · 清晰倍率 · 高性价比 · 稳定调用</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#quick-config">查看通用配置</a>
+          <a class="btn ghost" href="#workflow">新手推荐流程</a>
+        </div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="notice">
+        <div class="bulb">💡</div>
+        <div>
+          <h2>倍率越低，实际可用 Token 越多</h2>
+          <p>示例：若分组倍率为 <b>0.25</b>，充值 <b>10 元</b> 约可使用官方 <b>40 美元</b> Token 用量，计算方式为 <code>10 ÷ 0.25 = 40</code>。实际计费以后台模型价格、倍率与账单记录为准。</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <aside class="toc" aria-label="目录">
+      <div class="toc-title">目录</div>
+      <a href="#intro">一、OpenCub API 是什么？</a>
+      <a href="#prepare">二、使用前需要准备什么？</a>
+      <a href="#quick-config">三、通用配置信息</a>
+      <a href="#codex">四、Codex 使用方式</a>
+      <a href="#ccswitch">五、使用 CC-Switch 切换</a>
+      <a href="#claude-code">六、Claude Code 配置</a>
+      <a href="#clients">七、常见客户端配置</a>
+      <a href="#drawing-workbench">八、绘图工作台使用方法</a>
+      <a href="#models">九、可用模型与倍率</a>
+      <a href="#billing">十、收费说明</a>
+      <a href="#faq">十一、新手常见问题</a>
+      <a href="#workflow">十二、推荐使用流程</a>
+      <a href="#support">十三、售后与福利</a>
+    </aside>
+
+    <div>
+      <section class="card" id="intro">
+        <h2>一、OpenCub API 是什么？</h2>
+        <p class="lead">OpenCub API 是一个面向 GPT、Codex、Claude、绘图模型等服务的 API 中转站。</p>
+        <p>用户可以在 OpenCub API 后台创建自己的 API 密钥，然后把密钥配置到不同的软件或插件里使用。常见使用场景包括：</p>
+        <div class="grid-3">
+          <div class="info-box"><h4>开发工具</h4><p>Codex CLI、Codex 官方客户端、VS Code、Cursor、Windsurf 等。</p></div>
+          <div class="info-box"><h4>AI 客户端</h4><p>Cherry Studio、Open WebUI、其他 OpenAI 兼容客户端。</p></div>
+          <div class="info-box"><h4>模型服务</h4><p>GPT、Claude、图像生成等模型能力。</p></div>
+        </div>
+        <table class="config-table">
+          <tr><th>项目</th><th>填写内容</th></tr>
+          <tr><td>官网地址</td><td><a href="https://opencub.uk" target="_blank" rel="noopener">opencub.uk</a></td></tr>
+          <tr><td>宣传说明</td><td>多模型接入、倍率清晰、稳定调用、高性价比。具体模型与通道以后台显示为准。</td></tr>
+          <tr><td>兑换码 / 购买地址</td><td><a href="https://pay.ldxp.cn/shop/WT992VAX" target="_blank" rel="noopener">https://pay.ldxp.cn/shop/WT992VAX</a></td></tr>
+        </table>
+      </section>
+
+      <section class="card" id="prepare">
+        <h2>二、使用前需要准备什么？</h2>
+        <p class="lead">正式使用前，建议先完成账号、余额和 API Key 三件事。</p>
+        <div class="steps">
+          <div class="step"><div><h4>注册并登录 OpenCub API</h4><p>打开官网 <a href="https://opencub.uk" target="_blank" rel="noopener">opencub.uk</a>，注册账号并登录后台。</p></div></div>
+          <div class="step"><div><h4>兑换余额或购买兑换码</h4><p>如果手里有兑换码，进入后台兑换到账户余额；如果没有，可前往 <a href="https://pay.ldxp.cn/shop/WT992VAX" target="_blank" rel="noopener">购买地址</a> 购买。</p></div></div>
+          <div class="step"><div><h4>创建 API 密钥</h4><p>进入后台的 API 密钥页面，创建一个新的 API Key。后续配置 Codex、Claude Code、Cherry Studio、Open WebUI 等客户端时都会用到。</p></div></div>
+          <div class="step"><div><h4>保存通用配置信息</h4><p>记住 API 请求地址、API Key、模型名称。模型名称建议从后台复制，避免大小写或空格错误。</p></div></div>
+        </div>
+        <div class="callout warn"><b>安全提醒：</b>API Key 等同于账户调用凭证，请勿发到公开群、论坛、GitHub 仓库或任何公开位置。发现泄露后应立即在后台删除旧 Key 并重新创建。</div>
+      </section>
+
+      <section class="card" id="quick-config">
+        <h2>三、通用配置信息</h2>
+        <p class="lead">大部分软件配置时，都需要填写下面几项。客户端中通常选择 OpenAI / OpenAI-Compatible / 自定义 API 格式。</p>
+        <div class="copy-line"><span>API 请求地址：</span><span class="value code" data-copy="https://opencub.uk">https://opencub.uk</span><button class="copy-btn" type="button">复制</button></div>
+        <div class="copy-line"><span>API Key：</span><span class="value code" data-copy="sk-xxxxxxxxxxxxxxxx">sk-xxxxxxxxxxxxxxxx</span><button class="copy-btn" type="button">复制</button></div>
+        <div class="copy-line"><span>推荐模型：</span><span class="value code" data-copy="gpt-5.5">gpt-5.5</span><button class="copy-btn" type="button">复制</button></div>
+        <table class="config-table">
+          <tr><th>配置项</th><th>说明</th><th>示例</th></tr>
+          <tr><td>供应商名称</td><td>自己方便识别即可。</td><td><code>opencubapi</code></td></tr>
+          <tr><td>API 请求地址 / Base URL</td><td>填写 OpenCub API 的站点地址，不要多加空格或斜杠。</td><td><code>https://opencub.uk</code></td></tr>
+          <tr><td>API Key</td><td>在 OpenCub API 后台创建后复制。</td><td><code>sk-xxxxxxxxxxxxxxxx</code></td></tr>
+          <tr><td>模型名称</td><td>按后台显示填写，大小写保持一致。</td><td><code>gpt-5.5</code>（推荐）</td></tr>
+          <tr><td>模型获取</td><td>部分客户端支持自动获取模型；不支持时请手动填写模型名称。</td><td>点击“获取模型”或手动新增模型。</td></tr>
+        </table>
+      </section>
+
+      <section class="card" id="codex">
+        <h2>四、Codex 的常见使用方式</h2>
+        <p class="lead">Codex 常见有三种使用方式，新手可以优先选择图形界面，开发者可选择 CLI 或编辑器插件。</p>
+        <div class="grid-3">
+          <div class="info-box"><h4>1. Codex 官方客户端</h4><p>适合不想折腾命令行的新手用户。进入 Codex 官网后，按官方说明下载和使用。</p></div>
+          <div class="info-box"><h4>2. Codex CLI</h4><p>适合经常使用终端的开发者。配置好 API 地址和 Key 后，可在终端中直接调用。</p></div>
+          <div class="info-box"><h4>3. 编辑器插件</h4><p>适合在 VS Code、Cursor、Windsurf 等编辑器里直接使用。安装插件时请认准官方或可信来源。</p></div>
+        </div>
+        <div class="callout"><b>注意：</b>不同客户端的字段名称可能不一样，例如 API Base URL、Base URL、Endpoint、请求地址，本质都是填写 OpenCub API 请求地址。</div>
+      </section>
+
+      <section class="card" id="ccswitch">
+        <h2>五、如何通过 CC-Switch 切换到 OpenCub API？</h2>
+        <p class="lead">如果你想让 Codex 或相关工具使用 OpenCub API，可借助 CC-Switch 新增并启用供应商配置。</p>
+        <div class="steps">
+          <div class="step"><div><h4>下载 CC-Switch</h4><p>根据自己的系统下载 Windows / macOS / Linux 版本。统一打开 GitHub Releases 页面，找到自己系统对应的 Windows / macOS / Linux 版本下载：<a href="https://github.com/farion1231/cc-switch/releases" target="_blank" rel="noopener">https://github.com/farion1231/cc-switch/releases</a></p></div></div>
+          <div class="step"><div><h4>在后台创建 API Key</h4><p>进入 OpenCub API 后台，创建一个新的 API Key，后面会填入 CC-Switch。</p></div></div>
+          <div class="step"><div><h4>新增 OpenAI 供应商</h4><p>打开 CC-Switch，选择 OpenAI 图标，点击右侧加号，新增一个供应商配置。</p></div></div>
+          <div class="step"><div><h4>填写供应商信息</h4><p>供应商名称填 <code>opencubapi</code>，API Key 填后台创建的密钥，API 请求地址填 <code>https://opencub.uk</code>，模型名称推荐填写 <code>gpt-5.5</code>，也可以按后台显示填写。</p></div></div>
+          <div class="step"><div><h4>添加、启用并重启客户端</h4><p>点击添加，返回上一页后点击启用，然后重启 Codex 或对应客户端。重启后会通过 OpenCub API 进行调用。</p></div></div>
+        </div>
+      </section>
+
+      <section class="card" id="claude-code">
+        <h2>六、Claude Code 使用 GPT / 中转模型的方法</h2>
+        <p class="lead">Claude Code 可以通过配置中转 API 的方式接入 OpenCub API 支持的模型。不同版本配置入口可能不同，请以软件当前界面为准。</p>
+        <table class="config-table">
+          <tr><th>配置项</th><th>推荐填写</th></tr>
+          <tr><td>供应商名称</td><td><code>opencubapi</code></td></tr>
+          <tr><td>API Key</td><td>从 OpenCub API 后台创建并复制。</td></tr>
+          <tr><td>请求地址</td><td><code>https://opencub.uk</code></td></tr>
+          <tr><td>模型映射</td><td>推荐填写或映射 <code>gpt-5.5</code>；如需使用其他模型，请按后台支持的模型名称填写。</td></tr>
+        </table>
+        <p>配置完成后保存并重新启动 Claude Code。如果出现调用失败，先检查 API 地址、API Key、模型名称和账户余额。</p>
+      </section>
+
+      <section class="card" id="clients">
+        <h2>七、常见客户端使用方法</h2>
+        <h3>1. Cherry Studio</h3>
+        <ol>
+          <li>下载并安装 Cherry Studio。</li>
+          <li>打开设置，选择模型服务商或自定义服务商。</li>
+          <li>格式选择 OpenAI 或 OpenAI 兼容格式。</li>
+          <li>API 地址填写 <code>https://opencub.uk</code>。</li>
+          <li>API Key 填写后台创建的密钥。</li>
+          <li>点击“获取模型”，选择需要使用的模型后保存。</li>
+        </ol>
+
+        <h3>2. Open WebUI</h3>
+        <ol>
+          <li>进入 Open WebUI 设置页面。</li>
+          <li>找到连接、外部模型、OpenAI API 或类似入口。</li>
+          <li>Base URL 填写 <code>https://opencub.uk</code>。</li>
+          <li>API Key 粘贴自己的 OpenCub API 密钥。</li>
+          <li>保存配置，刷新模型列表，选择需要的模型开始使用。</li>
+        </ol>
+
+      </section>
+
+      <section class="card" id="drawing-workbench">
+        <h2>八、绘图工作台使用方法</h2>
+        <p class="lead">绘图工作台用于图像生成任务。使用前请先在 OpenCub API 后台确认账号支持图像生成模型，并单独创建 <code>image</code> 生图 API Key。</p>
+        <ol>
+          <li>进入绘图工作台。</li>
+          <li>模式选择 <b>作图</b>。</li>
+          <li>API 地址填写 <code>https://opencub.uk</code>。</li>
+          <li>中转密钥填写单独创建的 <code>image</code> 生图 API Key。</li>
+          <li>模型选择后台支持的绘图模型，例如 <code>gpt-image-2</code>。</li>
+          <li>分辨率只能选择 <b>2K</b> 或 <b>4K</b>，其他配置按需选择。</li>
+          <li>保存配置后，输入提示词并测试生成。</li>
+        </ol>
+        <table class="config-table">
+          <tr><th>绘图工作台参数</th><th>建议填写</th></tr>
+          <tr><td>模式</td><td>选择 <b>作图</b>。</td></tr>
+          <tr><td>API 地址</td><td><code>https://opencub.uk</code></td></tr>
+          <tr><td>模型</td><td>选择后台支持的绘图模型，例如 <code>gpt-image-2</code>。</td></tr>
+          <tr><td>中转密钥</td><td>填写单独创建的 <code>image</code> 生图 API Key。</td></tr>
+          <tr><td>张数</td><td>按需选择，新手建议先选择 <b>1</b> 张测试。</td></tr>
+          <tr><td>比例</td><td>按需选择，例如横版、竖版、方图或超宽横版。</td></tr>
+          <tr><td>分辨率</td><td>只能选择 <b>2K</b> 或 <b>4K</b>。</td></tr>
+          <tr><td>质量</td><td>按需选择，质量越高通常消耗越高。</td></tr>
+        </table>
+        <div class="callout warn"><b>提示：</b>图像模型、文本模型、Claude 模型、GPT 模型可能属于不同分组或倍率，使用前建议先看后台价格说明。</div>
+      </section>
+
+      <section class="card" id="models">
+        <h2>九、可使用模型与倍率参考</h2>
+        <p class="lead">下面是模型与倍率参考。正式计费请以 OpenCub API 后台展示为准。</p>
+        <table class="model-table">
+          <tr><th>模型</th><th>倍率</th><th>备注</th></tr>
+          <tr><td><b>GptPro</b></td><td><span class="tag green">0.35</span></td><td>纯血 Pro 号池</td></tr>
+          <tr><td><b>GptProCyber</b></td><td><span class="tag green">0.43</span></td><td>可逆向、网安</td></tr>
+          <tr><td><b>Claude1</b></td><td><span class="tag yellow">0.72</span></td><td>Kiro 反代，50% 缓存</td></tr>
+          <tr><td><b>Claude2</b></td><td><span class="tag yellow">1</span></td><td>Kiro 反代，80% 缓存</td></tr>
+          <tr><td><b>ClaudeAzure</b></td><td><span class="tag red">3.6</span></td><td>亚马逊官方 API</td></tr>
+          <tr><td><b>ClaudeMax</b></td><td><span class="tag orange">2.2</span></td><td>只能 CC 使用</td></tr>
+        </table>
+      </section>
+
+      <section class="card" id="billing">
+        <h2>十、模型收费说明</h2>
+        <p>不同模型的收费标准不同。一般来说，GPT、Claude、图像生成等模型会有各自的计费规则，高级模型或特殊通道的费用通常高于普通模型。</p>
+        <div class="grid-2">
+          <div class="info-box"><h4>倍率怎么看？</h4><p>倍率越低，消耗越少；同样余额下可使用的 Token 越多。示例：<code>10 ÷ 0.25 = 40</code>。</p></div>
+          <div class="info-box"><h4>如何避免余额消耗过快？</h4><p>调用前先确认模型倍率，不要误选高倍率模型；长文本、批量任务、图像任务会更快消耗余额。</p></div>
+        </div>
+        <div class="callout warn"><b>重要：</b>后台价格、倍率、缓存策略、可用模型可能会调整。遇到和本文档不一致的情况，以后台实时展示为准。</div>
+      </section>
+
+      <section class="card" id="faq">
+        <h2>十一、新手常见问题</h2>
+        <details open>
+          <summary>1. API 地址应该填什么？</summary>
+          <div class="details-body"><p>填写 OpenCub API 的请求地址：<code>https://opencub.uk</code>。不要多加空格，不要写成购买地址，也不要把后台页面地址误填到 API 地址里。</p></div>
+        </details>
+        <details>
+          <summary>2. API Key 从哪里来？</summary>
+          <div class="details-body"><p>API Key 需要在 OpenCub API 后台创建。创建后复制出来，填入对应软件的 API Key、Token、Secret Key 或密钥位置。</p></div>
+        </details>
+        <details>
+          <summary>3. 为什么配置后不能用？</summary>
+          <div class="details-body"><p>请按顺序检查：API 地址是否正确、API Key 是否复制完整、账户余额是否充足、模型名称是否正确、是否已保存或启用配置、客户端是否已重启、当前模型是否在后台支持。</p></div>
+        </details>
+        <details>
+          <summary>4. 为什么获取不到模型？</summary>
+          <div class="details-body"><p>常见原因包括 API Key 填错、API 地址填错、网络连接异常、客户端不支持自动拉取模型、账号余额不足或权限不足。可先手动填写模型名称测试。</p></div>
+        </details>
+        <details>
+          <summary>5. 为什么调用失败或报错？</summary>
+          <div class="details-body"><p>常见原因包括模型名称不支持、余额不足、请求地址错误、软件没有重启、选择了不支持的模型格式、中转站维护或通道异常。可把报错内容、调用时间、模型名称发给售后处理。</p></div>
+        </details>
+        <details>
+          <summary>6. 余额扣费和我预期不一样怎么办？</summary>
+          <div class="details-body"><p>先查看后台账单记录、调用模型、倍率、输入输出 Token、是否开启缓存或特殊通道。若仍有疑问，可把调用时间、模型名称、客户端名称和相关配置发给售后核对。</p></div>
+        </details>
+      </section>
+
+      <section class="card" id="workflow">
+        <h2>十二、推荐使用流程</h2>
+        <p class="lead">新手建议按下面顺序操作，能减少大部分配置问题。</p>
+        <div class="steps">
+          <div class="step"><div><h4>注册 OpenCub API</h4><p>进入官网 <a href="https://opencub.uk" target="_blank" rel="noopener">opencub.uk</a> 注册并登录后台。</p></div></div>
+          <div class="step"><div><h4>购买或兑换余额</h4><p>通过兑换码或 <a href="https://pay.ldxp.cn/shop/WT992VAX" target="_blank" rel="noopener">购买入口</a> 完成充值。</p></div></div>
+          <div class="step"><div><h4>创建 API Key</h4><p>在后台 API 密钥页面新建密钥，并妥善保存。</p></div></div>
+          <div class="step"><div><h4>选择客户端</h4><p>根据需求选择 Codex、Claude Code、Cherry Studio、Open WebUI 或绘图工作台。</p></div></div>
+          <div class="step"><div><h4>填写地址和密钥</h4><p>API 地址填 OpenCub API 请求地址，API Key 填后台创建的密钥。</p></div></div>
+          <div class="step"><div><h4>保存、获取模型、开始使用</h4><p>保存配置，获取或手动填写模型，选择模型后开始调用。</p></div></div>
+        </div>
+        <div class="callout"><b>一句话总结：</b>先在 OpenCub API 创建密钥，再把 API 地址和 API Key 填到对应软件里，保存启用后即可使用。</div>
+      </section>
+
+      <section class="card" id="support">
+        <h2>十三、售后与福利</h2>
+        <p>如果使用过程中遇到问题，可以添加售后微信或加入交流群。建议反馈问题时附上：客户端名称、模型名称、报错内容、API 地址填写位置、后台余额或账单记录。</p>
+        <div class="grid-2">
+          <div class="info-box"><h4>售后联系方式</h4><p>微信：<b>jiap26yearsold</b></p></div>
+          <div class="info-box"><h4>群内福利</h4><p>新人注册赠送 <b>3 刀</b>额度，拉新赠送 <b>5 刀</b>额度；群内也会不定时发布优惠活动、使用教程和问题解答，具体以群公告为准。</p></div>
+        </div>
+      </section>
+
+      <section class="card" id="ending">
+        <h2>结尾说明</h2>
+        <p>OpenCub API 适合需要使用 GPT、Codex、Claude、绘图模型等服务的用户。对于新手来说，只需要记住三个核心信息：<b>API 地址</b>、<b>API Key</b>、<b>模型名称</b>。只要这三项填写正确，并且账户余额充足，就可以在对应客户端中正常使用。</p>
+        <p class="lead">官网地址：<a href="https://opencub.uk" target="_blank" rel="noopener">opencub.uk</a>；API 请求地址：<code>https://opencub.uk</code>；兑换码购买地址：<a href="https://pay.ldxp.cn/shop/WT992VAX" target="_blank" rel="noopener">https://pay.ldxp.cn/shop/WT992VAX</a>；售后微信：<b>jiap26yearsold</b>。</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">© OpenCub API · 本文档仅用于站点使用说明，模型、价格、倍率和通道状态以后台实时展示为准。</div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.copy-btn').forEach(function(btn) {
+      btn.addEventListener('click', async function() {
+        const value = btn.parentElement.querySelector('[data-copy]')?.getAttribute('data-copy') || '';
+        try {
+          await navigator.clipboard.writeText(value);
+          const old = btn.textContent;
+          btn.textContent = '已复制';
+          setTimeout(function(){ btn.textContent = old; }, 1200);
+        } catch (e) {
+          alert('复制失败，请手动复制：' + value);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

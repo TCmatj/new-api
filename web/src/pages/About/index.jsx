@@ -21,10 +21,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { API, showError } from '../../helpers';
 import { applyDocumentTitle } from '../../helpers/documentTitle';
 import { marked } from 'marked';
-import { Typography } from '@douyinfe/semi-ui';
+import { Typography, Button } from '@douyinfe/semi-ui';
 import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
+const DOCS_ENTRY_URL = '/docs';
 
 const About = () => {
   const { t } = useTranslation();
@@ -67,6 +68,23 @@ const About = () => {
 
   return (
     <div className='mt-[72px] px-3 py-6 md:px-6 md:py-10'>
+      <div className='mx-auto mb-6 flex max-w-5xl flex-wrap items-center justify-between gap-3 rounded-[28px] border border-white/60 bg-white/78 px-5 py-4 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/72 md:px-6'>
+        <div>
+          <div className='text-base font-semibold text-slate-800 dark:text-slate-100'>
+            {t('站点使用文档')}
+          </div>
+          <div className='mt-1 text-sm text-slate-500 dark:text-slate-300'>
+            {t('查看注册、充值、API Key、客户端接入和绘图工作台说明')}
+          </div>
+        </div>
+        <Button
+          theme='solid'
+          type='primary'
+          onClick={() => window.open(DOCS_ENTRY_URL, '_blank', 'noopener,noreferrer')}
+        >
+          {t('打开使用文档')}
+        </Button>
+      </div>
       {aboutLoaded && normalizedAbout === '' ? (
         <div className='mx-auto max-w-3xl rounded-[32px] border border-white/60 bg-white/78 p-8 text-left shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/72'>
           <Text className='!text-base !leading-7 !text-slate-500 dark:!text-slate-300'>
